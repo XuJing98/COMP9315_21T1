@@ -8,7 +8,7 @@ PG_MODULE_MAGIC;
 typedef struct
 {
     int length;
-	int array[FILEXIBLE_ARRAY_MEMBER];
+	int array[FLEXIBLE_ARRAY_MEMBER];
 }intSet;
 int cmp_int(const void* _a , const void* _b);
 
@@ -64,7 +64,7 @@ intset_in(PG_FUNCTION_ARGS)
     result = (intSet *)palloc(VARHDRSZ+sizeof(int)*(countNum+1));
     SET_VARSIZE(result, VARHDRSZ+sizeof(int)*(countNum+1));
     result->array[0] = countNum;
-    for (i=1; i<countNum+1; i++)
+    for (int i=1; i<countNum+1; i++)
     {
         result->array[i] = array[i-1];
         elog(NOTICE, "index :%d, value:%d", i, array[i]);
@@ -89,20 +89,21 @@ intset_out(PG_FUNCTION_ARGS)
 	intSet *intPut = (intSet *) PG_GETARG_POINTER(0);
 	char result[1024];
 	char str[32];
+	result[0] = '\0';
 	strcat(result, "{");
 	if (intPut->array[0]>0)
     {
-        strcat(result,',');
+        strcat(result,",");
         pg_itoa(intPut->array[i], str);
-	    for( i = 2; i < intPut->array[0]; i++ )
+	    for(int i = 2; i < intPut->array[0]; i++ )
         {
-	        strcat(result,',');
+	        strcat(result,",");
 	        pg_itoa(intPut->array[i], str);
 	        strcat(result, str);
         }
     }
 
-	PG_RETURN_CSTRING(psprintf("%s", result););
+	PG_RETURN_CSTRING(psprintf("%s", result));
 }
 
 
