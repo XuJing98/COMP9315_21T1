@@ -94,7 +94,7 @@ intset_out(PG_FUNCTION_ARGS)
 	if (intPut->array[0]>0)
     {
         strcat(result,",");
-        pg_itoa(intPut->array[i], str);
+        pg_itoa(intPut->array[1], str);
 	    for(int i = 2; i < intPut->array[0]; i++ )
         {
 	        strcat(result,",");
