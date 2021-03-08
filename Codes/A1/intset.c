@@ -8,7 +8,7 @@ PG_MODULE_MAGIC;
 typedef struct
 {
     int length;
-	int array[FLEXIBLE_ARRAY_MEMBER];
+	int array[1];
 }intSet;
 int cmp_int(const void* _a , const void* _b);
 
