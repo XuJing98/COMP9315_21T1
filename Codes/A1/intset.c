@@ -7,14 +7,14 @@ PG_MODULE_MAGIC;
 
 typedef struct
 {
-    int length;
-	int array[FLEXIBLE_ARRAY_MEMBER];
+    int32 length;
+	int32 array[FLEXIBLE_ARRAY_MEMBER];
 }intSet;
-int cmp_int(const void* _a , const void* _b);
-int cmp_int(const void* _a , const void* _b)
+int32 cmp_int(const void* _a , const void* _b);
+int32 cmp_int(const void* _a , const void* _b)
 {
-    int* a = (int*)_a;
-    int* b = (int*)_b;
+    int32* a = (int*)_a;
+    int32* b = (int*)_b;
     return *a - *b;
 }
 
@@ -32,9 +32,9 @@ intset_in(PG_FUNCTION_ARGS)
     intSet *result;
     char *delim = "{, }";
     char *token;
-    int *array, length = 2, countNum = 0, f=0;
+    int32 *array, length = 2, countNum = 0, f=0;
     //initial an array to temporarily store the initial int data
-    array = (int *)malloc(sizeof(int)*length);
+    array = (int32 *)malloc(sizeof(int32)*length);
     token = strtok(str, delim);
     while( token != NULL ) {
         // if the array is full, realloc the new size
@@ -44,7 +44,7 @@ intset_in(PG_FUNCTION_ARGS)
             array = realloc(array,sizeof(int)*length);
         }
         // check if the value is distinct
-        for (int i=0; i<countNum; i++) {
+        for (int32 i=0; i<countNum; i++) {
             if (array[i] == atoi(token)) {
                 f = 1;
                 break;
@@ -58,11 +58,11 @@ intset_in(PG_FUNCTION_ARGS)
         f = 0;
     }
     // sort the value
-    qsort(array, countNum,sizeof(int), cmp_int);
-    result = (intSet *)palloc(VARHDRSZ+sizeof(int)*(countNum+1));
-    SET_VARSIZE(result, VARHDRSZ+sizeof(int)*(countNum+1));
+    qsort(array, countNum,sizeof(int32), cmp_int);
+    result = (intSet *)palloc(VARHDRSZ+sizeof(int32)*(countNum+1));
+    SET_VARSIZE(result, VARHDRSZ+sizeof(int32)*(countNum+1));
     result->array[0] = countNum;
-    for (int i=1; i<countNum+1; i++)
+    for (int32 i=1; i<countNum+1; i++)
     {
         result->array[i] = array[i-1];
         elog(NOTICE, "index :%d, value:%d", i, result->array[i]);
@@ -93,7 +93,7 @@ intset_out(PG_FUNCTION_ARGS)
     {
         pg_itoa(intPut->array[1], str);
         strcat(result, str);
-	    for(int i = 2; i < intPut->array[0]+1; i++ )
+	    for(int32 i = 2; i < intPut->array[0]+1; i++ )
         {
 	        strcat(result,",");
 	        pg_itoa(intPut->array[i], str);
@@ -111,9 +111,9 @@ Datum
 intset_con(PG_FUNCTION_ARGS)
 {
     intSet *a = (intSet *) PG_GETARG_POINTER(0);
-    int i = PG_GETARG_INT32(0);
-    int result = 0;
-    for (int k=1; k < a->array[0]+1; k++)
+    int32 i = PG_GETARG_INT32(0);
+    int32 result = -1;
+    for (int32 k=1; k < a->array[0]+1; k++)
     {
         if (i == a->array[k])
         {
@@ -132,7 +132,7 @@ Datum
 intset_card(PG_FUNCTION_ARGS)
 {
 	intSet *a = (intSet *) PG_GETARG_POINTER(0);
-    int result;
+    int32 result;
     result = a->array[0];
 
 
