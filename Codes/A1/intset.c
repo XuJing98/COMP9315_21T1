@@ -8,11 +8,9 @@ PG_MODULE_MAGIC;
 typedef struct
 {
     int length;
-	int array[1];
+	int array[FLEXIBLE_ARRAY_MEMBER];
 }intSet;
 int cmp_int(const void* _a , const void* _b);
-
-
 int cmp_int(const void* _a , const void* _b)
 {
     int* a = (int*)_a;
@@ -61,13 +59,17 @@ intset_in(PG_FUNCTION_ARGS)
     }
     // sort the value
     qsort(array, countNum,sizeof(int), cmp_int);
+    for (int i=0; i<countNum; i++)
+    {
+        elog(NOTICE, "index :%d, value:%d", i, array[i]);
+    }
     result = (intSet *)palloc(VARHDRSZ+sizeof(int)*(countNum+1));
     SET_VARSIZE(result, VARHDRSZ+sizeof(int)*(countNum+1));
     result->array[0] = countNum;
     for (int i=1; i<countNum+1; i++)
     {
         result->array[i] = array[i-1];
-        elog(NOTICE, "index :%d, value:%d", i, array[i]);
+        elog(NOTICE, "index :%d, value:%d", i, result->array[i]);
     }
     free(array);
 
@@ -89,12 +91,12 @@ intset_out(PG_FUNCTION_ARGS)
 	intSet *intPut = (intSet *) PG_GETARG_POINTER(0);
 	char result[1024];
 	char str[32];
-	result[0] = '\0';
+//	result[0] = '\0';
 	strcat(result, "{");
 	if (intPut->array[0]>0)
     {
-        strcat(result,",");
         pg_itoa(intPut->array[1], str);
+        strcat(result, str);
 	    for(int i = 2; i < intPut->array[0]; i++ )
         {
 	        strcat(result,",");
@@ -102,6 +104,7 @@ intset_out(PG_FUNCTION_ARGS)
 	        strcat(result, str);
         }
     }
+    strcat(result, "}");
 
 	PG_RETURN_CSTRING(psprintf("%s", result));
 }

@@ -6,7 +6,7 @@
 #include <stdlib.h>
 #include <string.h>
 
-typedef struct intSet{
+typedef struct {
      int index;
      int array[1];
 }intSet;
@@ -25,6 +25,7 @@ int main()
     char str[1024] = "{1, 2  , 3,4 ,11, 22, 1,1, 100,2,3}";
     char *delim = "{, }";
     char *token;
+    intSet *result;
     int *array, length = 2, countNum = 0, f=0;
     //initial an array to temporarily store the initial int data
     array = (int *)malloc(sizeof(int)*length);
@@ -60,6 +61,14 @@ int main()
     }
     printf("count = %d",countNum);
 
+    result = (intSet *)malloc(sizeof(int)*(countNum+2));
+    result->array[0] = countNum;
+    for (int i=1; i<countNum+1; i++)
+    {
+        result->array[i] = array[i-1];
+        printf("index :%d, value:%d\n", i, result->array[i]);
+    }
+    free(result);
     free(array);
 
 
