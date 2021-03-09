@@ -96,7 +96,7 @@ intset_out(PG_FUNCTION_ARGS)
 	    for(int i = 2; i < intPut->array[0]+1; i++ )
         {
 	        strcat(result,",");
-	        pg_i32toa(intPut->array[i], str);
+	        pg_ltoa(intPut->array[i], str);
             elog(NOTICE, "index :%d, value:%d, string:%s", i, intPut->array[i], str);
 	        strcat(result, str);
         }
