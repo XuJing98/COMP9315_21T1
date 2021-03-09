@@ -284,38 +284,41 @@ intset_union(PG_FUNCTION_ARGS)
     intSet *result;
     int countNuma = a->array[0];
     int countNumb = b->array[0];
-    int index1=1, index2=1, index=1;
-    result = (intSet *)palloc(VARHDRSZ+sizeof(int)*(countNuma+countNumb+1));
-    SET_VARSIZE(result, VARHDRSZ+sizeof(int)*(countNuma+countNumb+1));
-    result->array[0] = countNumb + countNuma;
-    while (index1 < (countNuma+1) && index2 < (countNumb+1))
+    int index=0, f=0;
+    int *array = (int *)malloc(sizeof(int)*(countNuma+countNumb));
+
+    for (int i=1; i<countNuma+1; i++)
     {
-        if (a->array[index1] < a->array[index2])
+        f = 0;
+        for (int j=1; j<countNumb+1; j++)
         {
-            result->array[index] = a->array[index1];
-            index1++;
+            if (a->array[i] == b->array[j])
+            {
+                f=1;
+                break;
+            }
+        }
+        if (f==0)
+        {
+            array[index] = a->array[i];
             index++;
         }
-        else{
-            result->array[index] = b->array[index2];
-            index2++;
-            index++;
-        }
     }
-    while(index1 < countNuma+1)
+    for (int j=1; j<countNumb+1; j++)
     {
-        result->array[index] = a->array[index1];
-        index1++;
+        array[index] = b->array[j];
         index++;
     }
-
-    while(index2 < countNumb+1)
+    qsort(array, index,sizeof(int), cmp_int);
+    result = (intSet *)palloc(VARHDRSZ+sizeof(int)*(index+1));
+    SET_VARSIZE(result, VARHDRSZ+sizeof(int)*(index+1));
+    result->array[0] = index;
+    for (int i=1; i<index+1; i++)
     {
-        result->array[index] = b->array[index2];
-        index2++;
-        index++;
+        result->array[i] = array[i-1];
     }
 
+    free(array);
     PG_RETURN_POINTER(result);
 }
 
