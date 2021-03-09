@@ -106,10 +106,10 @@ intset_out(PG_FUNCTION_ARGS)
 	PG_RETURN_CSTRING(psprintf("%s", result));
 }
 
-PG_FUNCTION_INFO_V1(intset_cardinality);
+PG_FUNCTION_INFO_V1(intset_card);
 
 Datum
-intset_cardinality(PG_FUNCTION_ARGS)
+intset_card(PG_FUNCTION_ARGS)
 {
 	intSet *a = (intSet *) PG_GETARG_POINTER(0);
     int result;

@@ -17,13 +17,12 @@ CREATE TYPE intSet (
    output = intset_out
 );
 
-
-CREATE FUNCTION intset_cardinality(intSet) RETURNS integer
+CREATE FUNCTION intset_card(intSet) RETURNS integer
    AS '_OBJWD_/intset' LANGUAGE C IMMUTABLE STRICT;
 
 CREATE OPERATOR # (
    rightarg = intSet,
-   procedure = intset_cardinality,
+   procedure = intset_card,
    commutator = #
 );
 
