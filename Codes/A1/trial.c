@@ -50,6 +50,8 @@ static int intset_compare(intSet *a, intSet *b)
     return result;
 }
 
+
+
 int main()
 {
     char str[1024] = "{1, 2  , 3,4 ,11, 22, 1,1, 100,2,3}";
