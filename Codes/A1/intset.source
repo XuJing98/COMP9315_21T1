@@ -78,14 +78,14 @@ CREATE OPERATOR @< (
 );
 
 
---CREATE FUNCTION intset_intersection(intSet, intSet) RETURNS intSet
---   AS '_OBJWD_/intset' LANGUAGE C IMMUTABLE STRICT;
+CREATE FUNCTION intset_intersection(intSet, intSet) RETURNS intSet
+   AS '_OBJWD_/intset' LANGUAGE C IMMUTABLE STRICT;
 
---CREATE OPERATOR && (
---   leftarg = intSet,
---   rightarg = intSet,
---   procedure = intset_intersection
---);
+CREATE OPERATOR && (
+   leftarg = intSet,
+   rightarg = intSet,
+   procedure = intset_intersection
+);
 
 
 
