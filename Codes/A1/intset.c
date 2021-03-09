@@ -34,7 +34,7 @@ intset_in(PG_FUNCTION_ARGS)
     char *token;
     int *array, length = 2, countNum = 0, f=0;
     //initial an array to temporarily store the initial int data
-    array = (int32 *)malloc(sizeof(int32)*length);
+    array = (int *)malloc(sizeof(int)*length);
     token = strtok(str, delim);
     while( token != NULL ) {
         // if the array is full, realloc the new size
@@ -44,7 +44,7 @@ intset_in(PG_FUNCTION_ARGS)
             array = realloc(array,sizeof(int)*length);
         }
         // check if the value is distinct
-        for (int32 i=0; i<countNum; i++) {
+        for (int i=0; i<countNum; i++) {
             if (array[i] == atoi(token)) {
                 f = 1;
                 break;
@@ -281,10 +281,12 @@ intset_union(PG_FUNCTION_ARGS)
 {
     intSet *a = (intSet *) PG_GETARG_POINTER(0);
     intSet *b = (intSet *) PG_GETARG_POINTER(1);
+    intSet *result;
     int countNuma = a->array[0];
     int countNumb = b->array[0];
     int index1=1, index2=1, index=1;
-    intSet *result = (intSet *)palloc(sizeof(int)*(countNuma+countNumb+2));
+    result = (intSet *)palloc(VARHDRSZ+sizeof(int)*(countNuma+countNumb+1));
+    SET_VARSIZE(result, VARHDRSZ+sizeof(int)*(countNuma+countNumb+1));
     result->array[0] = countNumb + countNuma;
     while (index1 < (countNuma+1) && index2 < (countNumb+1))
     {
