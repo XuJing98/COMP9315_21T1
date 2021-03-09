@@ -7,14 +7,14 @@ PG_MODULE_MAGIC;
 
 typedef struct
 {
-    int32 length;
-	int32 array[FLEXIBLE_ARRAY_MEMBER];
+    int length;
+	int array[FLEXIBLE_ARRAY_MEMBER];
 }intSet;
-int32 cmp_int(const void* _a , const void* _b);
-int32 cmp_int(const void* _a , const void* _b)
+int cmp_int(const void* _a , const void* _b);
+int cmp_int(const void* _a , const void* _b)
 {
-    int32* a = (int*)_a;
-    int32* b = (int*)_b;
+    int* a = (int*)_a;
+    int* b = (int*)_b;
     return *a - *b;
 }
 
@@ -32,7 +32,7 @@ intset_in(PG_FUNCTION_ARGS)
     intSet *result;
     char *delim = "{, }";
     char *token;
-    int32 *array, length = 2, countNum = 0, f=0;
+    int *array, length = 2, countNum = 0, f=0;
     //initial an array to temporarily store the initial int data
     array = (int32 *)malloc(sizeof(int32)*length);
     token = strtok(str, delim);
@@ -58,9 +58,9 @@ intset_in(PG_FUNCTION_ARGS)
         f = 0;
     }
     // sort the value
-    qsort(array, countNum,sizeof(int32), cmp_int);
-    result = (intSet *)palloc(VARHDRSZ+sizeof(int32)*(countNum+1));
-    SET_VARSIZE(result, VARHDRSZ+sizeof(int32)*(countNum+1));
+    qsort(array, countNum,sizeof(int), cmp_int);
+    result = (intSet *)palloc(VARHDRSZ+sizeof(int)*(countNum+1));
+    SET_VARSIZE(result, VARHDRSZ+sizeof(int)*(countNum+1));
     result->array[0] = countNum;
     for (int i=1; i<countNum+1; i++)
     {
@@ -85,7 +85,7 @@ Datum
 intset_out(PG_FUNCTION_ARGS)
 {
 	intSet *intPut = (intSet *) PG_GETARG_POINTER(0);
-	char result[10240];
+	char result[1024];
 	char str[32];
     result[0] = '\0';
 	strcat(result, "{");
