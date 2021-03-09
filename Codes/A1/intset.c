@@ -4,7 +4,6 @@
 #include "access/hash.h"
 
 PG_MODULE_MAGIC;
-typedef int32 int;
 
 typedef struct
 {
@@ -113,7 +112,7 @@ intset_card(PG_FUNCTION_ARGS)
 {
 	intSet *a = (intSet *) PG_GETARG_POINTER(0);
     int result;
-    result = a->array[0]
+    result = a->array[0];
 
 
 	PG_RETURN_INT32(result);
