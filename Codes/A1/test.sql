@@ -9,6 +9,8 @@ update mySets set iset = iset || '{7,8,9,2,1}' where id = 3;
 select id, iset, (# iset) as card from mySets order by id;
 update mySets set iset = iset && '{7,8,9,2,1}' where id = 4;
 select id, iset, (# iset) as card from mySets order by id;
+update mySets set iset = iset - '{7,2,1}' where id = 4;
+select id, iset, (# iset) as card from mySets order by id;
 select a.*, b.* from mySets a, mySets b
 where (b.iset @< a.iset) and a.id != b.id;
 delete from mySets where iset <> '{2,3,1}';

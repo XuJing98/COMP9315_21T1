@@ -98,6 +98,15 @@ CREATE OPERATOR || (
    procedure = intset_union
 );
 
+CREATE FUNCTION intset_differ(intSet, intSet) RETURNS intSet
+   AS '_OBJWD_/intset' LANGUAGE C IMMUTABLE STRICT;
+
+CREATE OPERATOR - (
+   leftarg = intSet,
+   rightarg = intSet,
+   procedure = intset_differ
+);
+
 
 --CREATE FUNCTION intset_con(integer, intSet) RETURNS bool
 --   AS '_OBJWD_/intset' LANGUAGE C IMMUTABLE STRICT;

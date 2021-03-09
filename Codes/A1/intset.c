@@ -297,6 +297,51 @@ intset_intersection(PG_FUNCTION_ARGS)
     PG_RETURN_POINTER(result);
 }
 
+PG_FUNCTION_INFO_V1(intset_differ);
+
+Datum
+intset_differ(PG_FUNCTION_ARGS)
+{
+    intSet *a = (intSet *) PG_GETARG_POINTER(0);
+    intSet *b = (intSet *) PG_GETARG_POINTER(1);
+    intSet *result;
+    int countNuma = a->array[0];
+    int countNumb = b->array[0];
+    int index=0, f=0;
+    int *array = (int *)malloc(sizeof(int)*(countNuma+countNumb));
+
+    for (int i=1; i<countNuma+1; i++)
+    {
+        f = 0;
+        for (int j=1; j<countNumb+1; j++)
+        {
+            if (a->array[i] == b->array[j])
+            {
+                f=1;
+                break;
+
+            }
+        }
+        if (f==0)
+        {
+            array[index] = a->array[i];
+            index++;
+        }
+
+    }
+    qsort(array, index,sizeof(int), cmp_int);
+    result = (intSet *)palloc(VARHDRSZ+sizeof(int)*(index+1));
+    SET_VARSIZE(result, VARHDRSZ+sizeof(int)*(index+1));
+    result->array[0] = index;
+    for (int i=1; i<index+1; i++)
+    {
+        result->array[i] = array[i-1];
+    }
+    free(array);
+    PG_RETURN_POINTER(result);
+}
+
+
 PG_FUNCTION_INFO_V1(intset_union);
 
 Datum
