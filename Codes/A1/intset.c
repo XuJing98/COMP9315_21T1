@@ -427,7 +427,7 @@ intset_disjunction(PG_FUNCTION_ARGS)
         f = 0;
         for (int j=1; j<countNuma+1; j++)
         {
-            if (a->array[i] == b->array[j])
+            if (a->array[j] == b->array[i])
             {
                 f=1;
                 break;
