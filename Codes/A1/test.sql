@@ -5,7 +5,7 @@ insert into mySets values (3, '{5, 2 , 10}');
 insert into mySets values (4, '{5, 2 , 0001, 99999999, 666666, 100000000}');
 insert into mySets values (6, '{5,2}');
 insert into mySets values (5, '{}');
-select * from mySets where 1?iset >0;
+select * from mySets where 1?iset = TRUE;
 update mySets set iset = iset || '{7,8,9,2,1}' where id = 3;
 select id, iset, (# iset) as card from mySets order by id;
 update mySets set iset = iset && '{7,8,9,2,1}' where id = 4;
