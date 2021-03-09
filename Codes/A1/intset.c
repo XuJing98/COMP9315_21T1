@@ -254,7 +254,7 @@ intset_subset(PG_FUNCTION_ARGS)
     intSet *b = (intSet *) PG_GETARG_POINTER(1);
 
 
-    PG_RETURN_BOOL(intset_superset(b,a) == 0);
+    PG_RETURN_BOOL(intset_sup(b,a) == 0);
 }
 
 
