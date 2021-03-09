@@ -34,7 +34,20 @@ CREATE OPERATOR = (
    rightarg = intSet,
    procedure = intset_equal,
    commutator = =,
-   -- negator= <>,
+   negator= <>,
+   restrict = eqsel,
+   join = eqjoinsel
+);
+
+CREATE FUNCTION intset_notequal(intSet, intSet) RETURNS bool
+   AS '_OBJWD_/intset' LANGUAGE C IMMUTABLE STRICT;
+
+CREATE OPERATOR <> (
+   leftarg = intSet,
+   rightarg = intSet,
+   procedure = intset_notequal,
+   commutator = <>,
+   negator= =,
    restrict = eqsel,
    join = eqjoinsel
 );

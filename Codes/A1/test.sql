@@ -6,7 +6,9 @@ insert into mySets values (4, '{5, 2 , 0001, 99999999, 666666, 100000000}');
 insert into mySets values (5, '{}');
 insert into mySets values (6, '{3, 2, 1}');
 select id, iset, (# iset) as card from mySets order by id;
-delete from mySets where iset = '{2,5,10}';
+delete from mySets where iset = '{5,10,2}';
+select * from mySets;
+delete from mySets where iset <> '{2,3,1}';
 select * from mySets;
 
 
