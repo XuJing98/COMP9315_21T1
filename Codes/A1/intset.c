@@ -4,6 +4,7 @@
 #include "access/hash.h"
 
 PG_MODULE_MAGIC;
+typedef int32 int
 
 typedef struct
 {
@@ -105,6 +106,18 @@ intset_out(PG_FUNCTION_ARGS)
 	PG_RETURN_CSTRING(psprintf("%s", result));
 }
 
+PG_FUNCTION_INFO_V1(intset_cardinality);
+
+Datum
+intset_cardinality(PG_FUNCTION_ARGS)
+{
+	intSet *a = (intSet *) PG_GETARG_POINTER(0);
+    int result;
+    result = a->array[0]
+
+
+	PG_RETURN_INT32(result);
+}
 
 
 //PG_FUNCTION_INFO_V1(intset_eq);

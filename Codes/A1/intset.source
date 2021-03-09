@@ -18,6 +18,14 @@ CREATE TYPE intSet (
 );
 
 
+CREATE FUNCTION intset_cardinality(intSet) RETURNS integer
+   AS '_OBJWD_/intset' LANGUAGE C IMMUTABLE STRICT;
+
+CREATE OPERATOR # (
+   rightarg = intSet,
+   procedure = intset_cardinality,
+   commutator = #
+);
 
 
 --CREATE FUNCTION intset_eq(intSet, intSet) RETURNS bool
