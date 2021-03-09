@@ -32,7 +32,6 @@ CREATE OPERATOR ? (
    leftarg = integer,
    rightarg = intSet,
    procedure = intset_con,
-   commutator = ?
 );
 
 
