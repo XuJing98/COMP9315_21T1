@@ -118,14 +118,16 @@ CREATE OPERATOR !! (
 );
 
 
---CREATE FUNCTION intset_con(integer, intSet) RETURNS bool
---   AS '_OBJWD_/intset' LANGUAGE C IMMUTABLE STRICT;
+CREATE FUNCTION intset_con(integer, intSet) RETURNS bool
+  AS '_OBJWD_/intset' LANGUAGE C IMMUTABLE STRICT;
 
---CREATE OPERATOR ? (
---   leftarg = integer,
---   rightarg = intSet,
---   procedure = intset_con
---);
+CREATE OPERATOR ? (
+   leftarg = integer,
+   rightarg = intSet,
+   procedure = intset_con,
+   restrict = eqsel,
+   join = eqjoinsel
+   );
 
 
 
