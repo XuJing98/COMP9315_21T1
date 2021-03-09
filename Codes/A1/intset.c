@@ -143,13 +143,14 @@ intset_card(PG_FUNCTION_ARGS)
 static int intset_compare(intSet *a, intSet *b)
 {
     int result = 0;
-    int f=0;
+    int f;
     if (a->array[0] != b->array[0])
     {
         result = -1;
     }
     for (int i=1; i<a->array[0]+1; i++)
     {
+        f = 0;
         if (result==-1) break;
 
         for (int j=1; j<b->array[0]+1; j++)
@@ -176,13 +177,14 @@ static int intset_compare(intSet *a, intSet *b)
 static int intset_sup(intSet *a, intSet *b)
 {
     int result = 0;
-    int f=0;
+    int f;
     if (a->array[0] < b->array[0])
     {
         result = -1;
     }
     for (int i=1; i<b->array[0]+1; i++)
     {
+        f = 0;
         if (result == -1) break;
 
         for (int j=1; j<a->array[0]+1; j++)
