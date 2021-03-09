@@ -270,25 +270,20 @@ intset_intersection(PG_FUNCTION_ARGS)
     intSet *result;
     int countNuma = a->array[0];
     int countNumb = b->array[0];
-    int index=0, f=0;
+    int index=0;
     int *array = (int *)malloc(sizeof(int)*(countNuma+countNumb));
 
     for (int i=1; i<countNuma+1; i++)
     {
-        f = 0;
         for (int j=1; j<countNumb+1; j++)
         {
             if (a->array[i] == b->array[j])
             {
-                f=1;
-                break;
+                array[index] = a->array[i];
+                index++;
             }
         }
-        if (f==0)
-        {
-            array[index] = a->array[i];
-            index++;
-        }
+
     }
     qsort(array, index,sizeof(int), cmp_int);
     result = (intSet *)palloc(VARHDRSZ+sizeof(int)*(index+1));
