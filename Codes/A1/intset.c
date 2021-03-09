@@ -260,6 +260,66 @@ intset_subset(PG_FUNCTION_ARGS)
 }
 
 
+//PG_FUNCTION_INFO_V1(intset_intersection);
+//
+//Datum
+//intset_intersection(PG_FUNCTION_ARGS)
+//{
+//    intSet *a = (intSet *) PG_GETARG_POINTER(0);
+//    intSet *b = (intSet *) PG_GETARG_POINTER(1);
+//    int countNuma = a->array[0];
+//    int countNumb = b->array[0];
+//    intSet *result = (intSet *)palloc()
+//
+//    PG_RETURN_POINTER();
+//}
+
+PG_FUNCTION_INFO_V1(intset_union);
+
+Datum
+intset_union(PG_FUNCTION_ARGS)
+{
+    intSet *a = (intSet *) PG_GETARG_POINTER(0);
+    intSet *b = (intSet *) PG_GETARG_POINTER(1);
+    int countNuma = a->array[0];
+    int countNumb = b->array[0];
+    int index1=1, index2=1, index=1;
+    intSet *result = (intSet *)palloc(sizeof(int)*(countNuma+countNumb+2));
+    result->array[0] = countNumb + countNuma;
+    while (index1 < (countNuma+1) && index2 < (countNumb+1))
+    {
+        if (a->array[index1] < a->array[index2])
+        {
+            result->array[index] = a->array[index1];
+            index1++;
+            index++;
+        }
+        else{
+            result->array[index] = b->array[index2];
+            index2++;
+            index++;
+        }
+    }
+    while(index1 < countNuma+1)
+    {
+        result->array[index] = a->array[index1];
+        index1++;
+        index++;
+    }
+
+    while(index2 < countNumb+1)
+    {
+        result->array[index] = b->array[index2];
+        index2++;
+        index++;
+    }
+
+    PG_RETURN_POINTER(result);
+}
+
+
+
+
 
 //PG_FUNCTION_INFO_V1(intset_eq);
 //
