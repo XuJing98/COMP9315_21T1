@@ -4,7 +4,7 @@
 #include "access/hash.h"
 
 PG_MODULE_MAGIC;
-typedef int32 int
+typedef int32 int;
 
 typedef struct
 {
