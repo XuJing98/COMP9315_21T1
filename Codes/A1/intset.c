@@ -65,7 +65,7 @@ intset_in(PG_FUNCTION_ARGS)
     for (int i=1; i<countNum+1; i++)
     {
         result->array[i] = array[i-1];
-        elog(NOTICE, "index :%d, value:%d s1:%lld s2:%ld,s3:%ld,", i, result->array[i],sizeof(int), sizeof(int), sizeof(int32));
+        elog(NOTICE, "index :%d, value:%d s2:%lu,s3:%lu,", i, result->array[i], sizeof(int), sizeof(int32));
     }
     free(array);
 
