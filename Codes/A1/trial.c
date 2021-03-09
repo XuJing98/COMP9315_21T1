@@ -19,6 +19,36 @@ int cmp_int(const void* _a , const void* _b)
     int* b = (int*)_b;
     return *a - *b;
 }
+static int intset_compare(intSet *a, intSet *b)
+{
+    int result = 0;
+    int f=0;
+    if (a->array[0] != b->array[0])
+    {
+        result = -1;
+    }
+    for (int i=1; i<a->array[0]+1; i++)
+    {
+        if (result == -1) break;
+
+        for (int j=1; j<b->array[0]+1; j++)
+        {
+            if (a->array[i] == b->array[j])
+            {
+                f = 1;
+                break;
+            }
+
+        }
+        if (f==0)
+        {
+            result = -1;
+            break;
+        }
+
+    }
+    return result;
+}
 
 int main()
 {
@@ -26,6 +56,7 @@ int main()
     char *delim = "{, }";
     char *token;
     intSet *result;
+    intSet *result2;
     int *array, length = 2, countNum = 0, f=0;
     //initial an array to temporarily store the initial int data
     array = (int *)malloc(sizeof(int)*length);
@@ -62,6 +93,7 @@ int main()
     printf("count = %d",countNum);
 
     result = (intSet *)malloc(sizeof(int)*(countNum+2));
+
     result->array[0] = countNum;
     for (int i=1; i<countNum+1; i++)
     {
@@ -69,29 +101,21 @@ int main()
         printf("index :%d, value:%d\n", i, result->array[i]);
     }
 
-    bool n = false;
-    int i = 1;
-    int j = 9;
-    for (int k=1; k < result->array[0]+1; k++)
-    {
+    result2 = (intSet *)malloc(sizeof(int)*(countNum+2));
 
-        if (i == result->array[k])
-        {
-            n = true;
-            break;
-        }
-    }
-    printf("%d\n", n);
-    n = false;
-    for (int k=1; k < result->array[0]+1; k++)
+    result2->array[0] = countNum;
+    for (int i=1; i<countNum+1; i++)
     {
-        if (j== result->array[k])
-        {
-            n = true;
-            break;
-        }
+        result2->array[i] = array[i-1]+1;
+        printf("index :%d, value:%d\n", i, result2->array[i]);
     }
-    printf("%d", n);
+
+
+
+    int t = intset_compare(result, result);
+    printf("compare: %d\n",t);
+    int t2= intset_compare(result, result2);
+    printf("compare: %d\n",t2);
     free(result);
     free(array);
 

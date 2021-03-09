@@ -33,7 +33,10 @@ CREATE OPERATOR = (
    leftarg = intSet,
    rightarg = intSet,
    procedure = intset_equal,
-   commutator = =
+   commutator = =,
+   -- negator= <>,
+   restrict = eqsel,
+   join = eqjoinsel
 );
 
 --CREATE FUNCTION intset_con(integer, intSet) RETURNS bool

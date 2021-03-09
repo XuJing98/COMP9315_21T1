@@ -138,6 +138,39 @@ intset_card(PG_FUNCTION_ARGS)
 	PG_RETURN_INT32(a->array[0]);
 }
 
+// compare the two intSet
+// return 0 when a=b, else return -1
+static int intset_compare(intSet *a, intSet *b)
+{
+    int result = 0;
+    int f=0;
+    if (a->array[0] != b->array[0])
+    {
+        result = -1;
+    }
+    for (int i=1; i<a->array[0]+1; i++)
+    {
+        if (result==-1) break;
+
+        for (int j=1; j<b->array[0]+1; j++)
+        {
+            if (a->array[i] == b->array[j])
+            {
+                f = 1;
+                break;
+            }
+
+        }
+        if (f==0)
+        {
+            result = -1;
+            break;
+        }
+
+    }
+    return result;
+}
+
 
 PG_FUNCTION_INFO_V1(intset_equal);
 
@@ -146,27 +179,9 @@ intset_equal(PG_FUNCTION_ARGS)
 {
     intSet *a = (intSet *) PG_GETARG_POINTER(0);
     intSet *b = (intSet *) PG_GETARG_POINTER(1);
-    int result = 1;
-    if (a->array[0] != b->array[0])
-    {
-        result = 0;
-    }
-    for (int i=1; i<a->array[0]+1; i++)
-    {
-        if (!result) break;
 
-        for (int j=1; j<b->array[0]+1; j++)
-        {
-            if (a->array[i] != b->array[j])
-            {
-                result = -1;
-                break;
-            }
-        }
 
-    }
-
-    PG_RETURN_BOOL(result>0);
+    PG_RETURN_BOOL(intset_compare(a,b) == 0);
 }
 
 
