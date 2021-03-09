@@ -22,8 +22,7 @@ CREATE FUNCTION intset_card(intSet) RETURNS integer
 
 CREATE OPERATOR # (
    rightarg = intSet,
-   procedure = intset_card,
-   commutator = #
+   procedure = intset_card
 );
 
 
