@@ -31,7 +31,8 @@ CREATE FUNCTION intset_con(integer, intSet) RETURNS bool
 CREATE OPERATOR ? (
    leftarg = integer,
    rightarg = intSet,
-   procedure = intset_con
+   procedure = intset_con,
+   commutator = ?
 );
 
 

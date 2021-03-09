@@ -111,18 +111,18 @@ Datum
 intset_con(PG_FUNCTION_ARGS)
 {
     intSet *a = (intSet *) PG_GETARG_POINTER(0);
-    int32 i = PG_GETARG_INT32(0);
-    bool result = false;
+    int i = PG_GETARG_INT32(0);
+    int result = 0;
     for (int k=1; k < a->array[0]+1; k++)
     {
         if (i == a->array[k])
         {
-            result = true;
+            result = 1;
             break;
         }
     }
 
-    PG_RETURN_BOOL(result);
+    PG_RETURN_BOOL(result>0);
 }
 
 
