@@ -139,6 +139,18 @@ intset_card(PG_FUNCTION_ARGS)
 }
 
 
+//PG_FUNCTION_INFO_V1(intset_equal);
+//
+//Datum
+//intset_equal(PG_FUNCTION_ARGS)
+//{
+//    intSet *a = (intSet *) PG_GETARG_POINTER(0);
+//    intSet *b = (intSet *) PG_GETARG_POINTER(1);
+//
+//    PG_RETURN_INT32(a->array[0]);
+//}
+
+
 //PG_FUNCTION_INFO_V1(intset_eq);
 //
 //Datum
