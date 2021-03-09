@@ -68,8 +68,34 @@ int main()
         result->array[i] = array[i-1];
         printf("index :%d, value:%d\n", i, result->array[i]);
     }
+
+    bool n = false;
+    int i = 1;
+    int j = 9;
+    for (int k=1; k < result->array[0]+1; k++)
+    {
+
+        if (i == result->array[k])
+        {
+            n = true;
+            break;
+        }
+    }
+    printf("%d\n", n);
+    n = false;
+    for (int k=1; k < result->array[0]+1; k++)
+    {
+        if (j== result->array[k])
+        {
+            n = true;
+            break;
+        }
+    }
+    printf("%d", n);
     free(result);
     free(array);
+
+
 
 
 }
