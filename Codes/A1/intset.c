@@ -61,7 +61,7 @@ intset_in(PG_FUNCTION_ARGS)
     qsort(array, countNum,sizeof(int), cmp_int);
     for (int i=0; i<countNum; i++)
     {
-        elog(NOTICE, "index :%d, value:%d", i, array[i]);
+        elog(NOTICE, "index_1 :%d, value:%d", i, array[i]);
     }
     result = (intSet *)palloc(VARHDRSZ+sizeof(int)*(countNum+1));
     SET_VARSIZE(result, VARHDRSZ+sizeof(int)*(countNum+1));
@@ -91,7 +91,7 @@ intset_out(PG_FUNCTION_ARGS)
 	intSet *intPut = (intSet *) PG_GETARG_POINTER(0);
 	char result[1024];
 	char str[32];
-//	result[0] = '\0';
+    result[0] = '\0';
 	strcat(result, "{");
 	if (intPut->array[0]>0)
     {
