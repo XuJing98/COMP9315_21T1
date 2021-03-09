@@ -111,7 +111,7 @@ Datum
 intset_con(PG_FUNCTION_ARGS)
 {
     intSet *a = (intSet *) PG_GETARG_POINTER(0);
-    int32 i = PG_GETARG_INT32(0);
+    int32 i = PG_GETARG_INT(0);
     int32 result = -1;
     for (int32 k=1; k < a->array[0]+1; k++)
     {
