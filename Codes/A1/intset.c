@@ -173,7 +173,7 @@ static int intset_compare(intSet *a, intSet *b)
 
 // check if a is a superset of b
 //if true return 0 else return -1
-static int intset_superset(intSet *a, intSet *b)
+static int intset_sup(intSet *a, intSet *b)
 {
     int result = 0;
     int f=0;
@@ -241,7 +241,7 @@ intset_superset(PG_FUNCTION_ARGS)
     intSet *b = (intSet *) PG_GETARG_POINTER(1);
 
 
-    PG_RETURN_BOOL(intset_superset(a,b) == 0);
+    PG_RETURN_BOOL(intset_sup(a,b) == 0);
 }
 
 
