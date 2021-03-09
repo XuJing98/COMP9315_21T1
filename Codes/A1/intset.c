@@ -113,9 +113,9 @@ intset_con(PG_FUNCTION_ARGS)
     intSet *a = (intSet *) PG_GETARG_POINTER(0);
     int i = PG_GETARG_INT32(0);
     bool result = false;
-    for (int k=1; k < result->array[0]+1; k++)
+    for (int k=1; k < a->array[0]+1; k++)
     {
-        if (i == result->array[k])
+        if (i == a->array[k])
         {
             result = true;
             break;
