@@ -62,7 +62,7 @@ intset_in(PG_FUNCTION_ARGS)
     result = (intSet *)palloc(VARHDRSZ+sizeof(int32)*(countNum+1));
     SET_VARSIZE(result, VARHDRSZ+sizeof(int32)*(countNum+1));
     result->array[0] = countNum;
-    for (int32 i=1; i<countNum+1; i++)
+    for (int i=1; i<countNum+1; i++)
     {
         result->array[i] = array[i-1];
         elog(NOTICE, "index :%d, value:%d", i, result->array[i]);
@@ -85,15 +85,15 @@ Datum
 intset_out(PG_FUNCTION_ARGS)
 {
 	intSet *intPut = (intSet *) PG_GETARG_POINTER(0);
-	char result[1024];
+	char result[10240];
 	char str[32];
     result[0] = '\0';
 	strcat(result, "{");
-	if (intPut->array[0]>0)
+	if (intPut->array[0] > 0)
     {
         pg_itoa(intPut->array[1], str);
         strcat(result, str);
-	    for(int32 i = 2; i < intPut->array[0]+1; i++ )
+	    for(int i = 2; i < intPut->array[0]+1; i++ )
         {
 	        strcat(result,",");
 	        pg_itoa(intPut->array[i], str);
@@ -134,11 +134,8 @@ Datum
 intset_card(PG_FUNCTION_ARGS)
 {
 	intSet *a = (intSet *) PG_GETARG_POINTER(0);
-    int32 result;
-    result = a->array[0];
 
-
-	PG_RETURN_INT32(result);
+	PG_RETURN_INT32(a->array[0]);
 }
 
 
