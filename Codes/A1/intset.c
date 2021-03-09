@@ -2,6 +2,7 @@
 #include "utils/builtins.h"
 #include "fmgr.h"
 #include "access/hash.h"
+#include "stdlib.h"
 
 PG_MODULE_MAGIC;
 
