@@ -105,26 +105,28 @@ intset_out(PG_FUNCTION_ARGS)
 	PG_RETURN_CSTRING(psprintf("%s", result));
 }
 
-PG_FUNCTION_INFO_V1(intset_con);
 
-Datum
-intset_con(PG_FUNCTION_ARGS)
-{
-    intSet *a = (intSet *) PG_GETARG_POINTER(0);
-    int32 i = PG_GETARG_INT32(0);
-    int32 result = -1;
-    for (int32 k=1; k < a->array[0]+1; k++)
-    {
-        if (i == a->array[k])
-        {
-            result = 1;
-            break;
-        }
-    }
 
-    PG_RETURN_BOOL(result>0);
-}
-
+//PG_FUNCTION_INFO_V1(intset_con);
+//
+//Datum
+//intset_con(PG_FUNCTION_ARGS)
+//{
+//    intSet *a = (intSet *) PG_GETARG_POINTER(0);
+//    int32 i = PG_GETARG_INT32(0);
+//    int32 result = -1;
+//    for (int32 k=1; k < a->array[0]+1; k++)
+//    {
+//        if (i == a->array[k])
+//        {
+//            result = 1;
+//            break;
+//        }
+//    }
+//
+//    PG_RETURN_BOOL(result>0);
+//}
+//
 
 PG_FUNCTION_INFO_V1(intset_card);
 

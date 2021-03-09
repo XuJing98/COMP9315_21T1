@@ -25,15 +25,15 @@ CREATE OPERATOR # (
    procedure = intset_card
 );
 
-CREATE FUNCTION intset_con(integer, intSet) RETURNS bool
-   AS '_OBJWD_/intset' LANGUAGE C IMMUTABLE STRICT;
+--CREATE FUNCTION intset_con(integer, intSet) RETURNS bool
+--   AS '_OBJWD_/intset' LANGUAGE C IMMUTABLE STRICT;
 
-CREATE OPERATOR ? (
-   leftarg = integer,
-   rightarg = intSet,
-   procedure = intset_con,
-   commutator = ?
-);
+--CREATE OPERATOR ? (
+--   leftarg = integer,
+--   rightarg = intSet,
+--   procedure = intset_con,
+--   commutator = ?
+--);
 
 
 --CREATE FUNCTION intset_eq(intSet, intSet) RETURNS bool
