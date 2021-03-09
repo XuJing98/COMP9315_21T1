@@ -87,7 +87,7 @@ intset_out(PG_FUNCTION_ARGS)
 	intSet *intPut = (intSet *) PG_GETARG_POINTER(0);
 	char result[1024];
 	char str[32];
-    result[0] = '\0';
+    result[0] = "\0";
 	strcat(result, "{");
 	if (intPut->array[0] > 0)
     {
@@ -97,6 +97,7 @@ intset_out(PG_FUNCTION_ARGS)
         {
 	        strcat(result,",");
 	        pg_itoa(intPut->array[i], str);
+            elog(NOTICE, "index :%d, value:%d, string:%s", i, intPut->array[i], str);
 	        strcat(result, str);
         }
     }
