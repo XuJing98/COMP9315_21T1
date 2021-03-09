@@ -187,7 +187,7 @@ static int intset_sup(intSet *a, intSet *b)
 
         for (int j=1; j<a->array[0]+1; j++)
         {
-            if (a->array[i] == b->array[j])
+            if (b->array[i] == a->array[j])
             {
                 f = 1;
                 break;
