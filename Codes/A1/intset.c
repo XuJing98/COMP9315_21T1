@@ -59,10 +59,6 @@ intset_in(PG_FUNCTION_ARGS)
     }
     // sort the value
     qsort(array, countNum,sizeof(int), cmp_int);
-    for (int i=0; i<countNum; i++)
-    {
-        elog(NOTICE, "index_1 :%d, value:%d", i, array[i]);
-    }
     result = (intSet *)palloc(VARHDRSZ+sizeof(int)*(countNum+1));
     SET_VARSIZE(result, VARHDRSZ+sizeof(int)*(countNum+1));
     result->array[0] = countNum;
