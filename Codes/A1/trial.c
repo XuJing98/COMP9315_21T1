@@ -43,7 +43,7 @@ static int re_compare(char *str, char *pattern)
 
 static int input_valid(char *str)
 {
-    char * p1 = "\{\s*[0-9]+\s*(\s*,\s*[0-9]+\s*)*\}";
+    char * p1 = "\\{\\s*[0-9]+\\s*(\\s*,\\s*[0-9]+\\s*)*\\}";
     if (re_compare(str,p1))
     {
         return 1;
