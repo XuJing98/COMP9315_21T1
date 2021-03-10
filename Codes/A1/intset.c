@@ -152,11 +152,11 @@ intset_in(PG_FUNCTION_ARGS)
     char *token;
     int *array, length = 2, countNum = 0, f=0;
     char *delim = "{, }";
-    if (!input_valid(str))
-		ereport(ERROR,
-				(errcode(ERRCODE_INVALID_TEXT_REPRESENTATION),
-				 errmsg("invalid input syntax for type %s: \"%s\"",
-						"intSet", str)));
+//    if (!input_valid(str))
+//		ereport(ERROR,
+//				(errcode(ERRCODE_INVALID_TEXT_REPRESENTATION),
+//				 errmsg("invalid input syntax for type %s: \"%s\"",
+//						"intSet", str)));
 
 
     //initial an array to temporarily store the initial int data
