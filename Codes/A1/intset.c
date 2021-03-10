@@ -85,10 +85,11 @@ Datum
 intset_out(PG_FUNCTION_ARGS)
 {
 	intSet *intPut = (intSet *) PG_GETARG_POINTER(0);
-	int length = (intPut->array[0]+2)*24;
+	int length;
 	char *result;
-	result = (char *)palloc(sizeof(char)*length);
 	char str[24];
+	length = (intPut->array[0]+2)*24;
+    result = (char *)palloc(sizeof(char)*length);
     result[0] = '\0';
 	strcat(result, "{");
 	if (intPut->array[0] > 0)
