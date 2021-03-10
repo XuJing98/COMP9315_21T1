@@ -2,6 +2,7 @@
 #include "utils/builtins.h"
 #include "fmgr.h"
 #include "access/hash.h"
+#include "regex.h"
 
 PG_MODULE_MAGIC;
 
@@ -13,6 +14,8 @@ typedef struct
 static int intset_compare(intSet *a, intSet *b);
 static int cmp_int(const void* _a , const void* _b);
 static int intset_sup(intSet *a, intSet *b);
+static int re_compare(char *str, char *pattern);
+static int input_valid(char *str);
 
 // int compare function for qsort function
 static int cmp_int(const void* _a , const void* _b)
@@ -90,7 +93,35 @@ static int intset_sup(intSet *a, intSet *b)
     return result;
 }
 
+static int re_compare(char *str, char *pattern)
+{
+    regex_t re;
+    int result;
+    result = 0;
+    if (regcomp(&re, pattern, REG_EXTENDED) !=0)
+    {
+        result = 0;
+    }
+    if (regexec(&re, str,0, NULL, 0)==0)
+    {
+        result = 1;
+    }
+    regefree(&re)
+    return result;
+}
 
+static int input_valid(char *str)
+{
+    char * p1 = "^\{{1}\s*\}{1}$";
+    char * p2 = "^\{{1}\s*[0-9]+\s*(\s*,\s*[0-9]+\s*)*\}{1}$";
+    if (re_compare(str,p1)==1)
+        return 1;
+
+    if (re_compare(str,p2)==1)
+        return 1;
+
+    return 0;
+}
 
 /*****************************************************************************
  * Input/Output functions
@@ -106,11 +137,11 @@ intset_in(PG_FUNCTION_ARGS)
     char *token;
     int *array, length = 2, countNum = 0, f=0;
     char *delim = "{, }";
-//    if (input_valid(str)==0)
-//		ereport(ERROR,
-//				(errcode(ERRCODE_INVALID_TEXT_REPRESENTATION),
-//				 errmsg("invalid input syntax for type %s: \"%s\"",
-//						"intSet", str)));
+    if (input_valid(str)==0)
+		ereport(ERROR,
+				(errcode(ERRCODE_INVALID_TEXT_REPRESENTATION),
+				 errmsg("invalid input syntax for type %s: \"%s\"",
+						"intSet", str)));
 
 
     //initial an array to temporarily store the initial int data

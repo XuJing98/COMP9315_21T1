@@ -6,6 +6,7 @@
 #include <stdlib.h>
 #include <string.h>
 
+
 typedef struct {
      int index;
      int array[1];

@@ -6,6 +6,7 @@ insert into mySets values (4, '{5, 2 , 0001, 99999999, 666666, 100000, 11, 222, 
 insert into mySets values (6, '{5,2}');
 insert into mySets values (5, '{}');
 select * from mySets;
+insert into mySets values (7, '{1, {2,3}, 4}');
 
 
 
