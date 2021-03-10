@@ -1,129 +1,82 @@
-//
-// Created by jing on 6/03/2021.
-//
 #include <stdio.h>
-#include <stdbool.h>
-#include <stdlib.h>
 #include <string.h>
+#include <regex.h>
+#include <stdlib.h>
 
 
-typedef struct {
-     int index;
-     int array[1];
-}intSet;
-int cmp_int(const void* _a , const void* _b);
+static int re_compare(char *str, char *pattern);
+static int input_valid(char *str);
 
 
-int cmp_int(const void* _a , const void* _b)
+static int re_compare(char *str, char *pattern)
 {
-    int* a = (int*)_a;
-    int* b = (int*)_b;
-    return *a - *b;
-}
-static int intset_compare(intSet *a, intSet *b)
-{
-    int result = 0;
-    int f=0;
-    if (a->array[0] != b->array[0])
+    regex_t re;
+    int result;
+    result = 0;
+    if (regcomp(&re, pattern, REG_EXTENDED) !=0)
     {
-        result = -1;
+        result = 0;
     }
-    for (int i=1; i<a->array[0]+1; i++)
+    if (regexec(&re, str,0, NULL, 0)==0)
     {
-        if (result == -1) break;
-
-        for (int j=1; j<b->array[0]+1; j++)
-        {
-            if (a->array[i] == b->array[j])
-            {
-                f = 1;
-                break;
-            }
-
-        }
-        if (f==0)
-        {
-            result = -1;
-            break;
-        }
-
+        result = 1;
     }
+    regfree(&re);
     return result;
 }
 
+//static int regexMatch(char * str, char * regexPattern) {
+//    regex_t regex;
+//    int match = FALSE;
+//    // compile the regex
+//    if(regcomp(&regex, regexPattern, REG_EXTENDED)){
+//        return FALSE;
+//    }
+//    // execute the regex
+//    if(regexec(&regex, str, 0, NULL, 0) == 0) {
+//        match = TRUE;
+//    }
+//    // free the regex
+//    regfree(&regex);
+//    return match;
+//}
+
+static int input_valid(char *str)
+{
+    char * p1 = "^\{{1}\s*\}{1}$";
+    char * p2 = "^\{{1}\s*[0-9]+\s*(\s*,\s*[0-9]+\s*)*\}{1}$";
+    if (re_compare(str,p1) || re_compare(str,p2) )
+    {
+        return 1;
+    }
+
+    return 0;
+}
 
 
 int main()
 {
-    char str[1024] = "{1, 2  , 3,4 ,11, 22, 1,1, 100,2,3}";
-    char *delim = "{, }";
-    char *token;
-//    intSet *result;
-//    intSet *result2;
-    int *array, length = 2, countNum = 0, f=0;
-    //initial an array to temporarily store the initial int data
-    array = (int *)malloc(sizeof(int)*length);
-    token = strtok(str, delim);
-    while( token != NULL ) {
-        // if the array is full, realloc the new size
-        if(countNum == length-1)
-        {
-            length = length*2;
-            array = realloc(array,sizeof(int)*length);
-        }
-        // check if the value is distinct
-        for (int i=0; i<countNum; i++) {
-            if (array[i] == atoi(token)) {
-                f = 1;
-                break;
-            }
-        }
-        if (!f) {
-            array[countNum] = atoi(token);
-            countNum++;
-        }
-        token = strtok(NULL, delim);
-        f = 0;
-    }
-
-//    qsort(array, countNum,sizeof(int), cmp_int);
-//
-//
-    for(int i=0; i<countNum; i++)
+    char *s1 = "{1, 2, 3, 4, five}";
+    char *s2 = "{10, 9, 8, 7, 6,5,4,3,2,1}";
+    char *s3 = "{ }";
+    if (!input_valid(s1))
     {
-        printf("%d\n", array[i]);
+        printf("111\n");
     }
-    printf("count = %d",countNum);
 
-//    result = (intSet *)malloc(sizeof(int)*(countNum+2));
-//
-//    result->array[0] = countNum;
-//    for (int i=1; i<countNum+1; i++)
-//    {
-//        result->array[i] = array[i-1];
-//        printf("index :%d, value:%d\n", i, result->array[i]);
-//    }
-//
-//    result2 = (intSet *)malloc(sizeof(int)*(countNum+2));
-//
-//    result2->array[0] = countNum;
-//    for (int i=1; i<countNum+1; i++)
-//    {
-//        result2->array[i] = array[i-1]+1;
-//        printf("index :%d, value:%d\n", i, result2->array[i]);
-//    }
-//
-//
-//
-//    int t = intset_compare(result, result);
-//    printf("compare: %d\n",t);
-//    int t2= intset_compare(result, result2);
-//    printf("compare: %d\n",t2);
-//    free(result);
-    free(array);
+    if (input_valid(s2))
+    {
+        printf("222\n");
+    }
+
+    if (input_valid(s3))
+    {
+        printf("333\n");
+    }
 
 
 
-
+    return 0;
 }
+
 

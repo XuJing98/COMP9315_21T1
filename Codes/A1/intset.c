@@ -92,6 +92,22 @@ static int intset_sup(intSet *a, intSet *b)
     return result;
 }
 
+static int regexMatch(char * str, char * regexPattern) {
+    regex_t regex;
+    int match = 0;
+    // compile the regex
+    if(regcomp(&regex, regexPattern, REG_EXTENDED)){
+        return 0;
+    }
+    // execute the regex
+    if(regexec(&regex, str, 0, NULL, 0) == 0) {
+        match = 1;
+    }
+    // free the regex
+    regfree(&regex);
+    return match;
+}
+
 
 
 
