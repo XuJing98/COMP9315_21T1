@@ -45,7 +45,7 @@ static int input_valid(char *str)
 {
     char * p1 = "\\{\\s*[0-9]+\\s*(\\s*,\\s*[0-9]+\\s*)*\\}";
     char * p2 = "\\{\\s*\\}";
-    if (re_compare(str,p1)||re_compare(str.p2))
+    if (re_compare(str,p1)||re_compare(str, p2))
     {
         return 1;
     }
