@@ -15,10 +15,11 @@ static int re_compare(char *str, char *pattern)
     result = 0;
     if (regcomp(&re, pattern, REG_NEWLINE) !=0)
     {
-        result = 0;
+        printf("error\n");
     }
     if (regexec(&re, str,0, NULL, 0)==0)
     {
+        printf("compare is 0\n");
         result = 1;
     }
     regfree(&re);
@@ -74,15 +75,15 @@ int main()
     s2 = delete_space(s2);
     s1 = delete_space(s1);
     str = delete_space(str);
-    if (!input_valid(str))
-    {
-        printf("%s\n", str);
-    }
     if (!input_valid(s1))
     {
-        printf("%s\n", str);
+        printf("%s\n", s1);
     }
     if (!input_valid(s2))
+    {
+        printf("%s\n", s2);
+    }
+    if (!input_valid(str))
     {
         printf("%s\n", str);
     }
