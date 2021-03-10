@@ -86,7 +86,8 @@ intset_out(PG_FUNCTION_ARGS)
 {
 	intSet *intPut = (intSet *) PG_GETARG_POINTER(0);
 	int length = (intPut->array[0]+2)*24;
-	char result[length];
+	char *result;
+	result = (char *)palloc(sizeof(char)*length);
 	char str[24];
     result[0] = '\0';
 	strcat(result, "{");
