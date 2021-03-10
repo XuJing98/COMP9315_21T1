@@ -82,7 +82,7 @@ int main()
     {
         printf("%s\n", str);
     }
-    if (!input_valid(s3))
+    if (!input_valid(s2))
     {
         printf("%s\n", str);
     }
