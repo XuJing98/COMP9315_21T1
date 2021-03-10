@@ -106,7 +106,7 @@ static int re_compare(char *str, char *pattern)
     {
         result = 1;
     }
-    regefree(&re)
+    regfree(&re);
     return result;
 }
 
