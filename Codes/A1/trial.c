@@ -43,7 +43,7 @@ static int re_compare(char *str, char *pattern)
 
 static int input_valid(char *str)
 {
-    char * p1 = "^\{{1}[0-9]*(,[0-9]+)*\}{1}$";
+    char * p1 = "^\{{1}\}{1}$";
     if (re_compare(str,p1))
     {
         return 1;
