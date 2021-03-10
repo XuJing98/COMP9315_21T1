@@ -110,17 +110,32 @@ static int re_compare(char *str, char *pattern)
     return result;
 }
 
+static int regexMatch(char * str, char * regexPattern) {
+    regex_t regex;
+    int match = FALSE;
+    // compile the regex
+    if(regcomp(&regex, regexPattern, REG_EXTENDED)){
+        return FALSE;
+    }
+    // execute the regex
+    if(regexec(&regex, str, 0, NULL, 0) == 0) {
+        match = TRUE;
+    }
+    // free the regex
+    regfree(&regex);
+    return match;
+}
+
 static int input_valid(char *str)
 {
-    char * p1 = "^\{{1}\\s*\}{1}$";
-    char * p2 = "^\{{1}\\s*[0-9]+\\s*(\\s*,\\s*[0-9]+\\s*)*\}{1}$";
-    if (re_compare(str,p1)==1)
-        return 1;
+    char * p1 = "^\{{1}\s*\}{1}$";
+    char * p2 = "^\{{1}\s*[0-9]+\s*(\s*,\s*[0-9]+\s*)*\}{1}$";
+    if (regexMatch(str,p1) || regexMatch(str,p2) )
+    {
+        return TRUE;
+    }
 
-    if (re_compare(str,p2)==1)
-        return 1;
-
-    return 0;
+    return FALSE;
 }
 
 /*****************************************************************************
@@ -137,7 +152,7 @@ intset_in(PG_FUNCTION_ARGS)
     char *token;
     int *array, length = 2, countNum = 0, f=0;
     char *delim = "{, }";
-    if (input_valid(str)==0)
+    if (!input_valid(str))
 		ereport(ERROR,
 				(errcode(ERRCODE_INVALID_TEXT_REPRESENTATION),
 				 errmsg("invalid input syntax for type %s: \"%s\"",
