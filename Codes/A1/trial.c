@@ -13,7 +13,7 @@ static int re_compare(char *str, char *pattern)
     regex_t re;
     int result;
     result = 0;
-    if (regcomp(&re, pattern, 0) !=0)
+    if (regcomp(&re, pattern, REG_EXTENDED) !=0)
     {
         printf("error\n");
     }
