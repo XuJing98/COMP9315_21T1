@@ -25,26 +25,26 @@ static int re_compare(char *str, char *pattern)
     return result;
 }
 
-//static int regexMatch(char * str, char * regexPattern) {
-//    regex_t regex;
-//    int match = FALSE;
-//    // compile the regex
-//    if(regcomp(&regex, regexPattern, REG_EXTENDED)){
-//        return FALSE;
-//    }
-//    // execute the regex
-//    if(regexec(&regex, str, 0, NULL, 0) == 0) {
-//        match = TRUE;
-//    }
-//    // free the regex
-//    regfree(&regex);
-//    return match;
-//}
+////static int regexMatch(char * str, char * regexPattern) {
+////    regex_t regex;
+////    int match = FALSE;
+////    // compile the regex
+////    if(regcomp(&regex, regexPattern, REG_EXTENDED)){
+////        return FALSE;
+////    }
+////    // execute the regex
+////    if(regexec(&regex, str, 0, NULL, 0) == 0) {
+////        match = TRUE;
+////    }
+////    // free the regex
+////    regfree(&regex);
+////    return match;
+////}
 
 static int input_valid(char *str)
 {
-    char * p1 = "\{{1}\s*\}{1}";
-    char * p2 = "\{{1}\s*[0-9]+\s*(\s*,\s*[0-9]+\s*)*\}{1}";
+    char * p1 = "^\{{1}\}{1}$";
+    char * p2 = "^\{{1}[0-9]+(,[0-9]+)*\}{1}$";
     if (re_compare(str,p1) || re_compare(str,p2) )
     {
         return 1;
@@ -53,28 +53,40 @@ static int input_valid(char *str)
     return 0;
 }
 
+char* delete_space(char *str)
+{
+    int i=0, j=0;
+    char* str_c = (char*)malloc((strlen(str) + 1) * sizeof(char));
+    for (i = 0; str[i] != '\0'; i++)
+    {
+        if (str[i] != ' ')
+            str_c[j++] = str[i];
+    }
+    str_c[j] = '\0';
+    return str_c;
+}
+
 
 int main()
 {
     char *s1 = "{1, 2, 3, 4, five}";
-    char *s2 = "{10, 9, 8, 7, 6,5,4,3,2,1}";
-    char *s3 = "{ }";
+    char *s2 = "{10  , 9   , 8,    7,    6   ,5 ,    4,3,2,1}";
+    char *str = "{ }";
+    s2 = delete_space(s2);
+    s1 = delete_space(s1);
+    str = delete_space(str);
+    if (!input_valid(str))
+    {
+        printf("%s\n", str);
+    }
     if (!input_valid(s1))
     {
-        printf("111\n");
+        printf("%s\n", str);
     }
-
-    if (input_valid(s2))
+    if (!input_valid(s3))
     {
-        printf("222\n");
+        printf("%s\n", str);
     }
-
-    if (input_valid(s3))
-    {
-        printf("333\n");
-    }
-
-
 
     return 0;
 }
