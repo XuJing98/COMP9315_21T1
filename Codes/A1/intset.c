@@ -114,7 +114,7 @@ static int re_compare(char *str, char *pattern)
 
 static int input_valid(char *str)
 {
-    int frequency=0;
+    int f1=0, f2=0;
     char * p1 = "\\{\\s*[0-9]+\\s*(\\s*,\\s*[0-9]+\\s*)*\\}";
     char * p2 = "\\{\\s*\\}";
     char a1 = '{';
@@ -122,17 +122,13 @@ static int input_valid(char *str)
     for(int i = 0; str[i] != '\0'; ++i)
     {
         if(a1 == str[i])
-            ++frequency;
-    }
-    if (frequency >1)
-        return 0;
-    frequency = 0;
-    for(int i = 0; str[i] != '\0'; ++i)
-    {
+            ++f1;
         if(a2 == str[i])
-            ++frequency;
+            ++f2;
     }
-    if (frequency >1)
+    if (f1 >1)
+        return 0;
+    if (f2 >1)
         return 0;
     if (re_compare(str,p1)||re_compare(str, p2))
     {
@@ -198,7 +194,6 @@ intset_in(PG_FUNCTION_ARGS)
     for (int i=1; i<countNum+1; i++)
     {
         result->array[i] = array[i-1];
-        elog(NOTICE, "index :%d, value:%d", i, result->array[i]);
     }
     free(array);
 
