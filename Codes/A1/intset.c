@@ -114,8 +114,8 @@ static int re_compare(char *str, char *pattern)
 
 static int input_valid(char *str)
 {
-    char * p1 = "\\{\\s*[0-9]+\\s*(\\s*,\\s*[0-9]+\\s*)*\\}";
-    char * p2 = "\\{\\s*\\}";
+    char * p1 = "\\{{1}\\s*[0-9]+\\s*(\\s*,\\s*[0-9]+\\s*)*\\}{1}";
+    char * p2 = "\\{{1}\\s*\\}{1}";
     if (re_compare(str,p1)||re_compare(str, p2))
     {
         return 1;

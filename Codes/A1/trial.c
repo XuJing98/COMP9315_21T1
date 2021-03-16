@@ -25,21 +25,6 @@ static int re_compare(char *str, char *pattern)
     return result;
 }
 
-////static int regexMatch(char * str, char * regexPattern) {
-////    regex_t regex;
-////    int match = FALSE;
-////    // compile the regex
-////    if(regcomp(&regex, regexPattern, REG_EXTENDED)){
-////        return FALSE;
-////    }
-////    // execute the regex
-////    if(regexec(&regex, str, 0, NULL, 0) == 0) {
-////        match = TRUE;
-////    }
-////    // free the regex
-////    regfree(&regex);
-////    return match;
-////}
 
 static int input_valid(char *str)
 {
