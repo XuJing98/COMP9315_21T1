@@ -114,8 +114,26 @@ static int re_compare(char *str, char *pattern)
 
 static int input_valid(char *str)
 {
-    char * p1 = "\\{{1}\\s*[0-9]+\\s*(\\s*,\\s*[0-9]+\\s*)*\\}{1}";
-    char * p2 = "\\{{1}\\s*\\}{1}";
+    int frequency=0;
+    char * p1 = "\\{\\s*[0-9]+\\s*(\\s*,\\s*[0-9]+\\s*)*\\}";
+    char * p2 = "\\{\\s*\\}";
+    char a1 = '{';
+    char a2 = '}';
+    for(int i = 0; str[i] != '\0'; ++i)
+    {
+        if(a1 == str[i])
+            ++frequency;
+    }
+    if (frequency >1)
+        return 0;
+    frequency = 0;
+    for(int i = 0; str[i] != '\0'; ++i)
+    {
+        if(a2 == str[i])
+            ++frequency;
+    }
+    if (frequency >1)
+        return 0;
     if (re_compare(str,p1)||re_compare(str, p2))
     {
         return 1;
