@@ -94,7 +94,9 @@ static int intset_sup(intSet *a, intSet *b)
     return result;
 }
 
-
+// regular expression function
+// compile the regular pattern, then compare it with the str
+// if find the pattern return 1, else return 0
 static int re_compare(char *str, char *pattern)
 {
     regex_t re;
@@ -112,6 +114,8 @@ static int re_compare(char *str, char *pattern)
     return result;
 }
 
+//check if the input is valid using regex
+//if the input is valid return 1, else return 0
 static int input_valid(char *str)
 {
     int f1=0, f2=0;
@@ -154,7 +158,9 @@ intset_in(PG_FUNCTION_ARGS)
     intSet *result;
     char *token;
     int *array, length = 5, countNum = 0, f=0;
-    char *delim = "{, }";
+    // { , space } are the delimiters to divide the input str
+    char *delim = "{ ,}";
+    // check the input int array if it is valid
     if (input_valid(str)==0)
 		ereport(ERROR,
 				(errcode(ERRCODE_INVALID_TEXT_REPRESENTATION),
@@ -169,7 +175,7 @@ intset_in(PG_FUNCTION_ARGS)
         // if the array is full, realloc the new size
         if(countNum == length-1)
         {
-            // add 1000 more data size
+            // realloc 1000 more data size
             length = length+1000;
             array = realloc(array,sizeof(int)*length);
         }
@@ -212,14 +218,17 @@ intset_out(PG_FUNCTION_ARGS)
 	int length;
 	char *result;
 	char str[24];
+	// initial an char to store the array
 	length = (intPut->array[0]+2)*24;
     result = (char *)palloc(sizeof(char)*length);
     result[0] = '\0';
 	strcat(result, "{");
 	if (intPut->array[0] > 0)
     {
+	    // put the size of the data to result
         pg_ltoa(intPut->array[1], str);
         strcat(result, str);
+        // put the int array to the result
 	    for(int i = 2; i < intPut->array[0]+1; i++ )
         {
 	        strcat(result,",");
