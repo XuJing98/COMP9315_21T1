@@ -153,7 +153,7 @@ intset_in(PG_FUNCTION_ARGS)
 	char *str = PG_GETARG_CSTRING(0);
     intSet *result;
     char *token;
-    int *array, length = 2, countNum = 0, f=0;
+    int *array, length = 5, countNum = 0, f=0;
     char *delim = "{, }";
     if (input_valid(str)==0)
 		ereport(ERROR,
@@ -169,7 +169,8 @@ intset_in(PG_FUNCTION_ARGS)
         // if the array is full, realloc the new size
         if(countNum == length-1)
         {
-            length = length*2;
+            // add 1000 more data size
+            length = length+1000;
             array = realloc(array,sizeof(int)*length);
         }
         // check if the value is distinct
