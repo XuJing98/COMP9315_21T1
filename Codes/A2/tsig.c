@@ -110,7 +110,7 @@ Bits makeTupleSig(Reln r, Tuple t)
 	//TODO
 	Bits tsig;
 	char sigtype = sigType(r);
-	printf("sigtype:%c",sigtype);
+    printf("sigtype:%c",sigtype);
 	switch(sigtype){
 	    case 'c':
 	        tsig = makeTupleSigCATC(r, t); break;
@@ -129,52 +129,22 @@ void findPagesUsingTupSigs(Query q)
 {
 	assert(q != NULL);
 	//TODO
-//    Reln r = q->rel;
-//    // query signature
-//    Bits qsig = makeTupleSig(r, q->qstring);
-//    // tuple signatrue
-//    Bits tsig = newBits(tsigBits(r));
-//    // Pages = AllZeroBits
-//    unsetAllBits(q->pages);
-//    int pid;
-//
-//    // iterate all the pages
-//    for (int i = 0; i < nTsigPages(r); i++) {
-//        pid = i;
-//        Page p = getPage(r->tsigf, pid);
-//        // for each tuple
-//        for (int j = 0; j < pageNitems(p); j++) {
-//
-//            // get the signature for each tuple store in the tsig
-//            getBits(p, j, tsig);
-//            if (isSubset(qsig, tsig)) {
-//                // means it matches
-//                int located_page = q->nsigs / maxTupsPP(r);
-//                // include PID in Pages
-//                setBit(q->pages, located_page);
-//            }
-//            // the number of signature we scanned
-//            q->nsigs++;
-//        }
-//        q->nsigpages++;
-//    }
-    Bits querysig = makeTupleSig(q->rel, q->qstring);
-    Page p; Bits sig = newBits(tsigBits(q->rel)); PageID pid, i;
-    for (pid = 0; pid < nTsigPages(q->rel); pid++) {
-        p = getPage(tsigFile(q->rel), pid);
-        for (i = 0; i < pageNitems(p); i++){
-            getBits(p, i, sig);
-            //if query signature is subset of retrieved signature, then match
-            if (isSubset(querysig, sig) == TRUE){
-                // printf("sig on pid:%d, i:%d, pagenum: %d,sig:", pid, i, q->nsigs/maxTupsPP(q->rel)); showBits(sig); putchar('\n');
-                // get the page num for tuple, and set that bit
-                setBit(q->pages, q->nsigs/maxTupsPP(q->rel));
+
+    Page p;
+    Reln r = q->rel;
+    Bits querysig = makeTupleSig(r, q->qstring);
+    Bits tuplesig = newBits(tsigBits(r));
+    for (int i = 0; i < nTsigPages(r); i++) {
+        p = getPage(tsigFile(r), i);
+        for (int j = 0; j < pageNitems(p); j++){
+            getBits(p, j, tuplesig);
+            if (isSubset(querysig, tuplesig)){
+                setBit(q->pages, q->nsigs/maxTupsPP(r));
             }
             q->nsigs++;
         }
         q->nsigpages++;
     }
-
 
 	// The printf below is primarily for debugging
 	// Remove it before submitting this function
