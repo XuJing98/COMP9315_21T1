@@ -40,10 +40,11 @@ Bits makeTupleSigSIMC(Reln r, Tuple t)
     {
         if (tupleval[i][0]=='?')
         {
-            printf("question mark");
             cw = newBits(m);
+            printf("question mark %s\n",cw->bitstring);
         }else{
             cw = codeword(tupleval[i], m, k);
+            printf("attribute tuple %s\n",cw->bitstring);
         }
         orBits(tsig, cw);
     }
@@ -116,9 +117,8 @@ Bits makeTupleSig(Reln r, Tuple t)
 	        tsig = makeTupleSigCATC(r, t); break;
         case 's':
             tsig = makeTupleSigSIMC(r, t); break;
-        default:
-            return NULL;
 	}
+	printf("tsig:%s, bytes:%d, bits:%d\n",tsig->bistring, tsig->nbytes, tsig->nbits);
 	return tsig;
 
 }
@@ -132,6 +132,7 @@ void findPagesUsingTupSigs(Query q)
 
     Page p;
     Reln r = q->rel;
+    unsetAllBits(q->pages);
     Bits querysig = makeTupleSig(r, q->qstring);
     Bits tuplesig = newBits(tsigBits(r));
     for (int i = 0; i < nTsigPages(r); i++) {
@@ -139,7 +140,7 @@ void findPagesUsingTupSigs(Query q)
         for (int j = 0; j < pageNitems(p); j++){
             getBits(p, j, tuplesig);
             if (isSubset(querysig, tuplesig)){
-                setBit(q->pages, q->nsigs/maxTupsPP(r));
+                setBit(q->pages, q->nsigs / maxTupsPP(r));
             }
             q->nsigs++;
         }
