@@ -41,10 +41,14 @@ Bits makeTupleSigSIMC(Reln r, Tuple t)
         if (tupleval[i][0]=='?')
         {
             cw = newBits(m);
-            printf("question mark %s\n",cw->bitstring);
+            printf("question mark ");
+            showBits(cw);
+            putchar('\n');
         }else{
             cw = codeword(tupleval[i], m, k);
-            printf("attribute tuple %s\n",cw->bitstring);
+            printf("attribute tuple ");
+            showBits(cw);
+            putchar('\n');
         }
         orBits(tsig, cw);
     }
@@ -118,7 +122,7 @@ Bits makeTupleSig(Reln r, Tuple t)
         case 's':
             tsig = makeTupleSigSIMC(r, t); break;
 	}
-	printf("tsig:%s, bytes:%d, bits:%d\n",tsig->bistring, tsig->nbytes, tsig->nbits);
+	printf("tsig:"); showBits(tsig); putchar('\n');
 	return tsig;
 
 }
