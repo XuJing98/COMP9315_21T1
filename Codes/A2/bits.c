@@ -35,6 +35,7 @@ Bits newBits(int nbits)
 void freeBits(Bits b)
 {
 	//TODO
+	free(b);
 }
 
 // check if the bit at position is 1
@@ -44,7 +45,21 @@ Bool bitIsSet(Bits b, int position)
 	assert(b != NULL);
 	assert(0 <= position && position < b->nbits);
 	//TODO
-	return FALSE; // remove this
+	Count arrayIndex, arrayPosition;
+	Byte mask;
+	//the byte position of the bit is in
+	arrayIndex = position / 8;
+	//the position of the bit in that byte array
+	arrayPosition = position % 8;
+	// make the bit at position is 1 else 0
+	mask  = (1 << arrayPosition);
+	if (mask & (b->bitstring[arrayIndex]))
+    {
+        return TRUE;
+    }
+	else{
+        return FALSE;
+	}
 }
 
 // check whether one Bits b1 is a subset of Bits b2
@@ -53,8 +68,16 @@ Bool isSubset(Bits b1, Bits b2)
 {
 	assert(b1 != NULL && b2 != NULL);
 	assert(b1->nbytes == b2->nbytes);
+
 	//TODO
-	return FALSE; // remove this
+	if (b2->nbits != b1->nbits)
+        return FALSE;
+	for (int i=0; i<b2->nbytes; i++)
+    {
+	    if ((b2->bitstring[i]&b1->bitstring[i]) != b2->bitstring[i])
+	        return FALSE;
+    }
+	return TRUE; // remove this
 }
 
 // set the bit at position to 1
@@ -64,6 +87,15 @@ void setBit(Bits b, int position)
 	assert(b != NULL);
 	assert(0 <= position && position < b->nbits);
 	//TODO
+    Count arrayIndex, arrayPosition;
+    Byte mask;
+    //the byte position of the bit is in
+    arrayIndex = position / 8;
+    //the position of the bit in that byte array
+    arrayPosition = position % 8;
+    // make the bit at position is 1 else 0
+    mask  = (1 << arrayPosition);
+    b->bitstring[arrayIndex] = mask | (b->bitstring[arrayIndex]);
 }
 
 // set all bits to 1
@@ -72,6 +104,11 @@ void setAllBits(Bits b)
 {
 	assert(b != NULL);
 	//TODO
+	Byte mask = 255;
+	for(int i=0; i<b->nbytes ; i++)
+    {
+	    b->bitstring[i] = b->bitstring[i] | mask;
+    }
 }
 
 // set the bit at position to 0
@@ -81,6 +118,15 @@ void unsetBit(Bits b, int position)
 	assert(b != NULL);
 	assert(0 <= position && position < b->nbits);
 	//TODO
+    Count arrayIndex, arrayPosition;
+    Byte mask;
+    //the byte position of the bit is in
+    arrayIndex = position / 8;
+    //the position of the bit in that byte array
+    arrayPosition = position % 8;
+    // make the bit at position is 0 else 1
+    mask  = ~(1 << arrayPosition);
+    b->bitstring[arrayIndex] = mask & (b->bitstring[arrayIndex]);
 }
 
 // set all bits to 0
@@ -89,6 +135,11 @@ void unsetAllBits(Bits b)
 {
 	assert(b != NULL);
 	//TODO
+    Byte mask = 0;
+    for(int i=0; i<b->nbytes ; i++)
+    {
+        b->bitstring[i] = b->bitstring[i] & mask;
+    }
 }
 
 // bitwise AND ... b1 = b1 & b2
@@ -98,6 +149,10 @@ void andBits(Bits b1, Bits b2)
 	assert(b1 != NULL && b2 != NULL);
 	assert(b1->nbytes == b2->nbytes);
 	//TODO
+    for (int i=0; i<b2->nbytes; i++)
+    {
+        b1->bitstring[i] = b1->bitstring[i] & b2->bitstring[i];
+    }
 }
 
 // bitwise OR ... b1 = b1 | b2
@@ -107,6 +162,10 @@ void orBits(Bits b1, Bits b2)
 	assert(b1 != NULL && b2 != NULL);
 	assert(b1->nbytes == b2->nbytes);
 	//TODO
+    for (int i=0; i<b2->nbytes; i++)
+    {
+        b1->bitstring[i] = b1->bitstring[i] | b2->bitstring[i];
+    }
 }
 
 // left-shift ... b1 = b1 << n
@@ -115,6 +174,66 @@ void orBits(Bits b1, Bits b2)
 void shiftBits(Bits b, int n)
 {
     // TODO
+    assert(b!=NULL);
+    Count arrayIndex, arrayPosition;
+    Byte mask;
+    int bits = b->nbytes * 8;
+
+    if (n>0)
+    {
+        for (int i= bits-n-1; i>=0; i--)
+        {
+            arrayIndex = i / 8;
+            arrayPosition = i % 8;
+            mask  = (1 << arrayPosition);
+            if (mask & (b->bitstring[arrayIndex]))
+            {
+                arrayIndex = (i+n) / 8;
+                arrayPosition = (i+n) % 8;
+                mask  = (1 << arrayPosition);
+                b->bitstring[arrayIndex] = mask | (b->bitstring[arrayIndex]);
+            }
+            else{
+                arrayIndex = (i+n) / 8;
+                arrayPosition = (i+n) % 8;
+                mask  = ~(1 << arrayPosition);
+                b->bitstring[arrayIndex] = mask & (b->bitstring[arrayIndex]);
+            }
+        }
+        for (int j=0; j<n; j++)
+        {
+            unsetBit(b,j);
+        }
+    }
+    else{
+        for (int i=-n; i< bits; i++)
+        {
+            arrayIndex = i / 8;
+            arrayPosition = i % 8;
+            mask  = (1 << arrayPosition);
+            if (mask & (b->bitstring[arrayIndex]))
+            {
+                arrayIndex = (i+n) / 8;
+                arrayPosition = (i+n) % 8;
+                mask  = (1 << arrayPosition);
+                b->bitstring[arrayIndex] = mask | (b->bitstring[arrayIndex]);
+            }
+            else{
+                arrayIndex = (i+n) / 8;
+                arrayPosition = (i+n) % 8;
+                mask  = ~(1 << arrayPosition);
+                b->bitstring[arrayIndex] = mask & (b->bitstring[arrayIndex]);
+            }
+        }
+        for (int j=bits+n+1; j<bits; j++)
+        {
+            arrayIndex = j / 8;
+            arrayPosition = j % 8;
+            mask  = ~(1 << arrayPosition);
+            b->bitstring[arrayIndex] = mask & (b->bitstring[arrayIndex]);
+        }
+
+    }
 }
 
 // get a bit-string (of length b->nbytes)
@@ -124,6 +243,8 @@ void shiftBits(Bits b, int n)
 void getBits(Page p, Offset pos, Bits b)
 {
 	//TODO
+    Byte *addr = addrInPage(p, pos, b->nbytes);
+    memcpy(b->bitstring, addr, b->nbytes);
 }
 
 // copy the bit-string array in a BitsRep
@@ -132,6 +253,8 @@ void getBits(Page p, Offset pos, Bits b)
 void putBits(Page p, Offset pos, Bits b)
 {
 	//TODO
+    Byte *addr = addrInPage(p, pos, b->nbytes);
+    memcpy(addr, b->bitstring, b->nbytes);
 }
 
 // show Bits on stdout
