@@ -58,7 +58,7 @@ void scanAndDisplayMatchingTuples(Query q)
 	//TODO
     Bool flag;
 	Reln r = q->rel;
-    int pNum = newPage(r);
+    int pNum = nPages(r);
 	Tuple T1 = q->qstring;
 	for (int i=0; i<pNum; i++)
     {
