@@ -56,28 +56,27 @@ void scanAndDisplayMatchingTuples(Query q)
 {
 	assert(q != NULL);
 	//TODO
-
+    Bool flag;
 	Reln r = q->rel;
-    int pNum = r->params.npages;
+    int pNum = newPage(r);
 	Tuple T1 = q->qstring;
-	int flag = 0;
 	for (int i=0; i<pNum; i++)
     {
-	    flag = 0;
+	    flag = FALSE;
 	    if (!bitIsSet(q->pages, i)) continue;
         Page p = getPage(dataFile(r), i);
         for (int j=0; j < pageNitems(p); j++)
         {
             Tuple T2 = getTupleFromPage(r, p, j);
-            if (tupleMatch(r, T2, T1))
+            if (tupleMatch(r, T1, T2))
             {
                 showTuple(r, T2);
-                flag = 1;
+                flag = TRUE;
             }
             q->ntuples++;
 
         }
-        if (flag==0)
+        if (flag==FALSE)
         {
             q->nfalse++;
         }
