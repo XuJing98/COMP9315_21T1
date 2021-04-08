@@ -35,20 +35,21 @@ Bits makeTupleSigSIMC(Reln r, Tuple t)
     int nAttr = nAttrs(r);
     int m = tsigBits(r);
     int k = codeBits(r);
+    char *questionmark = "?\0";
     tsig = newBits(m);
     for (int i=0; i<nAttr; i++)
     {
-        if (tupleval[i][0]=='?')
+        if (strcmp(tupleval[i], questionmark)==0)
         {
             cw = newBits(m);
-            printf("question mark ");
-            showBits(cw);
-            putchar('\n');
+//            printf("question mark ");
+//            showBits(cw);
+//            putchar('\n');
         }else{
             cw = codeword(tupleval[i], m, k);
-            printf("attribute tuple ");
-            showBits(cw);
-            putchar('\n');
+//            printf("attribute tuple ");
+//            showBits(cw);
+//            putchar('\n');
         }
         orBits(tsig, cw);
     }
@@ -67,10 +68,11 @@ Bits makeTupleSigCATC(Reln r, Tuple t)
     int m2 = tsigBits(r) % nAttr;
     int k = codeBits(r);
     int counter1, counter2=0;
+    char *questionmark = "?\0";
     tsig = newBits(m);
     for (int i=0; i<nAttr; i++)
     {
-        if (tupleval[i][0]=='?')
+        if (strcmp(tupleval[i],questionmark)==0)
         {
             if (m2!=0 && i==0)
             {
@@ -89,6 +91,9 @@ Bits makeTupleSigCATC(Reln r, Tuple t)
                 cw = codeword(tupleval[i], m1, k);
                 counter1 = m1;
             }
+//            printf("attribute tuple ");
+//            showBits(cw);
+//            putchar('\n');
         }
         for(int j=0; j<counter1; j++)
         {
@@ -102,6 +107,9 @@ Bits makeTupleSigCATC(Reln r, Tuple t)
         }
 
     }
+//    printf("tsig");
+//    showBits(tsig);
+//    putchar('\n');
     return tsig;
 
 }
@@ -115,14 +123,14 @@ Bits makeTupleSig(Reln r, Tuple t)
 	//TODO
 	Bits tsig;
 	char sigtype = sigType(r);
-    printf("sigtype:%c",sigtype);
+//    printf("sigtype:%c",sigtype);
 	switch(sigtype){
 	    case 'c':
 	        tsig = makeTupleSigCATC(r, t); break;
         case 's':
             tsig = makeTupleSigSIMC(r, t); break;
 	}
-	printf("tsig:"); showBits(tsig); putchar('\n');
+//	printf("tsig:"); showBits(tsig); putchar('\n');
 	return tsig;
 
 }
@@ -133,17 +141,30 @@ void findPagesUsingTupSigs(Query q)
 {
 	assert(q != NULL);
 	//TODO
-
     Page p;
     Reln r = q->rel;
     unsetAllBits(q->pages);
     Bits querysig = makeTupleSig(r, q->qstring);
+//    printf("querysig ");
+//    showBits(querysig);
+//    putchar('\n');
     Bits tuplesig = newBits(tsigBits(r));
+//    printf("tuplesig ");
+//    showBits(tuplesig);
+//    putchar('\n');
+//    printf("ntsigpages: %d", nTsigPages(r));
     for (int i = 0; i < nTsigPages(r); i++) {
         p = getPage(tsigFile(r), i);
         for (int j = 0; j < pageNitems(p); j++){
             getBits(p, j, tuplesig);
+//            printf("querysig ");
+//            showBits(querysig);
+//            putchar('\n');
+//            printf("tuplesig ");
+//            showBits(tuplesig);
+//            putchar('\n');
             if (isSubset(querysig, tuplesig)){
+//                printf("!");
                 setBit(q->pages, q->nsigs / maxTupsPP(r));
             }
             q->nsigs++;
@@ -153,5 +174,5 @@ void findPagesUsingTupSigs(Query q)
 
 	// The printf below is primarily for debugging
 	// Remove it before submitting this function
-	printf("Matched Pages:"); showBits(q->pages); putchar('\n');
+//	printf("Matched Pages:"); showBits(q->pages); putchar('\n');
 }

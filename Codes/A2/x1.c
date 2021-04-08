@@ -9,6 +9,10 @@
 int main(int argc, char **argv)
 {
 	Bits b = newBits(60);
+	Bits b2 = newBits(60);
+    setBit(b2, 5);
+    setBit(b2, 11);
+    showBits(b2);
 	printf("t=0: "); showBits(b); printf("\n");
 	setBit(b, 5);
 	printf("t=1: "); showBits(b); printf("\n");
@@ -17,22 +21,14 @@ int main(int argc, char **argv)
 	setBit(b, 59);
 	setBit(b, 22);
 	setBit(b, 11);
-	printf("t=2: "); showBits(b); printf("\n");
-	if (bitIsSet(b,5)) printf("Bit 5 is set\n");
-	if (bitIsSet(b,10)) printf("Bit 10 is set\n");
-	shiftBits(b,3);
-    printf("t=3: "); showBits(b); printf("\n");
-    shiftBits(b,0);
-    printf("t=3: "); showBits(b); printf("\n");
-	setAllBits(b);
-	printf("t=4: "); showBits(b); printf("\n");
-	unsetBit(b, 40);
-	printf("t=5: "); showBits(b); printf("\n");
-    unsetAllBits(b);
-    printf("t=6: "); showBits(b); printf("\n");
-	if (bitIsSet(b,20)) printf("Bit 20 is set\n");
-	if (bitIsSet(b,40)) printf("Bit 40 is set\n");
-	if (bitIsSet(b,50)) printf("Bit 50 is set\n");
-	setBit(b, 59);
+	if (isSubset(b2, b))printf("t=2: ");
+	showBits(b2); printf("\n");
+	showBits(b); printf("\n");
+	setBit(b2, 12);
+    if (isSubset(b2, b))printf("t=t: ");
+    showBits(b2); printf("\n");
+    orBits(b, b2);
+    showBits(b);
+
 	return 0;
 }

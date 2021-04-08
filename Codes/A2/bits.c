@@ -70,14 +70,13 @@ Bool isSubset(Bits b1, Bits b2)
 	assert(b1->nbytes == b2->nbytes);
 
 	//TODO
-	if (b2->nbits != b1->nbits)
-        return FALSE;
+
 	for (int i=0; i<b2->nbytes; i++)
     {
-	    if ((b2->bitstring[i]&b1->bitstring[i]) != b2->bitstring[i])
+	    if ((b2->bitstring[i] | b1->bitstring[i]) != b2->bitstring[i])
 	        return FALSE;
     }
-	return TRUE; // remove this
+	return TRUE;
 }
 
 // set the bit at position to 1
