@@ -70,14 +70,13 @@ Bool isSubset(Bits b1, Bits b2)
 	assert(b1->nbytes == b2->nbytes);
 
 	//TODO
-	if (b2->nbits != b1->nbits)
-        return FALSE;
+
 	for (int i=0; i<b2->nbytes; i++)
     {
-	    if ((b2->bitstring[i]&b1->bitstring[i]) != b2->bitstring[i])
+	    if ((b2->bitstring[i] | b1->bitstring[i]) != b2->bitstring[i])
 	        return FALSE;
     }
-	return TRUE; // remove this
+	return TRUE;
 }
 
 // set the bit at position to 1
@@ -159,10 +158,16 @@ void andBits(Bits b1, Bits b2)
 
 void orBits(Bits b1, Bits b2)
 {
+//    showBits(b1);
+//    printf("%d", b1->nbytes);
+//    putchar('\n');
+//    showBits(b2);
+//    printf("%d", b2->nbytes);
+//    putchar('\n');
 	assert(b1 != NULL && b2 != NULL);
 	assert(b1->nbytes == b2->nbytes);
 	//TODO
-    for (int i=0; i<b2->nbytes; i++)
+    for (int i=0; i<b1->nbytes; i++)
     {
         b1->bitstring[i] = b1->bitstring[i] | b2->bitstring[i];
     }
@@ -264,7 +269,7 @@ void putBits(Page p, Offset pos, Bits b)
 void showBits(Bits b)
 {
 	assert(b != NULL);
-    //printf("(%d,%d)",b->nbits,b->nbytes);
+//    printf("(%d,%d)",b->nbits,b->nbytes);
 	for (int i = b->nbytes-1; i >= 0; i--) {
 		for (int j = 7; j >= 0; j--) {
 			Byte mask = (1 << j);

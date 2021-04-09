@@ -12,6 +12,7 @@
 #include "tsig.h"
 #include "bits.h"
 #include "hash.h"
+#include "psig.h"
 
 // open a file with a specified suffix
 // - always open for both reading and writing
@@ -140,10 +141,54 @@ PageID addToRelation(Reln r, Tuple t)
 	// compute tuple signature and add to tsigf
 	
 	//TODO
-
+    Bits tsig = makeTupleSig(r, t);
+    PageID tsigpid = rp->tsigNpages - 1;
+    Page tsigpage = getPage(r->tsigf, tsigpid);
+    // if the page is full
+    if (pageNitems(tsigpage) == rp->tsigPP) {
+        addPage(r->tsigf);
+        rp->tsigNpages++;
+        tsigpid++;
+        free(tsigpage);
+        tsigpage = newPage();
+        if (tsigpage == NULL) return NO_PAGE;
+    }
+    putBits(tsigpage, pageNitems(tsigpage), tsig);
+    addOneItem(tsigpage);
+    rp->ntsigs++;
+    putPage(r->tsigf, tsigpid, tsigpage);
 	// compute page signature and add to psigf
 
 	//TODO
+    Bits psig = makePageSig(r, t);
+//    showBits(psig);
+    PageID psigpid = rp->psigNpages - 1;
+    Page psigpage = getPage(r->psigf, psigpid);
+    if (rp->npages != rp->npsigs) {
+        // if the page is full
+        if (pageNitems(psigpage) == rp->psigPP) {
+            addPage(r->psigf);
+            rp->psigNpages++;
+            psigpid++;
+            free(psigpage);
+            psigpage = newPage();
+            if (psigpage == NULL) return NO_PAGE;
+        }
+        putBits(psigpage, pageNitems(psigpage), psig);
+        addOneItem(psigpage);
+        rp->npsigs++;
+
+    }else{
+        Bits ppsig = newBits(psigBits(r));
+        getBits(psigpage, pageNitems(psigpage)-1, ppsig);
+//        showBits(psig);
+//        showBits(ppsig);
+        if (ppsig == NULL) ppsig = newBits(psigBits(r));
+        orBits(psig, ppsig);
+        putBits(psigpage, pageNitems(psigpage)-1, psig);
+
+    }
+    putPage(r->psigf, psigpid, psigpage);
 
 	// use page signature to update bit-slices
 
