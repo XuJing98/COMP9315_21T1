@@ -58,10 +58,34 @@ Status newRelation(char *name, Count nattrs, float pF, char sigtype,
 	addPage(r->dataf); p->npages = 1; p->ntups = 0;
 	addPage(r->tsigf); p->tsigNpages = 1; p->ntsigs = 0;
 	addPage(r->psigf); p->psigNpages = 1; p->npsigs = 0;
-	addPage(r->bsigf); p->bsigNpages = 1; p->nbsigs = 0; // replace this
+	addPage(r->bsigf); p->bsigNpages = 1; p->nbsigs = 0;
 	// Create a file containing "pm" all-zeroes bit-strings,
     // each of which has length "bm" bits
 	//TODO
+	PageID bsigpageID;
+	Page bsigpage;
+	Bits bsig = newBits(bm);
+	for (int i=0; i<pm; i++)
+    {
+	    bsigpageID = p->bsigNpages - 1;
+	    bsigpage = getPage(r->bsigf, bsigpageID);
+	    if (pageNitems(bsigpage) == p->bsigPP )
+        {
+            addPage(r->bsigf);
+            p->bsigNpages++;
+            bsigpageID++;
+            free(bsigpage);
+            bsigpage = newPage();
+            if (bsigpage == NULL) return NO_PAGE;
+        }
+        putBits(bsigpage, pageNitems(bsigpage), bsig);
+        addOneItem(bsigpage);
+        p->nbsigs++;
+        putPage(r->bsigf, bsigpageID, bsigpage);
+
+    }
+	freeBits(bsig);
+
 	closeRelation(r);
 	return 0;
 }
@@ -181,8 +205,6 @@ PageID addToRelation(Reln r, Tuple t)
     }else{
         Bits ppsig = newBits(psigBits(r));
         getBits(psigpage, pageNitems(psigpage)-1, ppsig);
-//        showBits(psig);
-//        showBits(ppsig);
         if (ppsig == NULL) ppsig = newBits(psigBits(r));
         orBits(psig, ppsig);
         freeBits(ppsig);
@@ -194,6 +216,34 @@ PageID addToRelation(Reln r, Tuple t)
 	// use page signature to update bit-slices
 
 	//TODO
+	Page bsigpage;
+	Bits bsigtuple;
+    PageID bpageID;
+    int boffset;
+//    printf("psigBits:%d\n", psigBits(r));
+//    showBits(psig);
+//    putchar('\n');
+	for (int i=0; i<psigBits(r); i++)
+    {
+	    if (bitIsSet(psig, i))
+        {
+	        bpageID = i / maxBsigsPP(r);
+	        boffset = i % maxBsigsPP(r);
+	        bsigpage = getPage(r->bsigf, bpageID);
+            bsigtuple = newBits(bsigBits(r));
+            getBits(bsigpage, boffset, bsigtuple);
+            setBit(bsigtuple, nPsigs(r)-1);
+//            showBits(bsigtuple);
+//            putchar('\n');
+            putBits(bsigpage, boffset, bsigtuple);
+            putPage(r->bsigf, bpageID,bsigpage );
+
+        }
+
+    }
+	freeBits(tsig);
+	freeBits(psig);
+	freeBits(bsigtuple);
 
 	return nPages(r)-1;
 }
