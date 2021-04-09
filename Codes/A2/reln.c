@@ -10,6 +10,7 @@
 #include "page.h"
 #include "tuple.h"
 #include "tsig.h"
+#include "psig.h"
 #include "bits.h"
 #include "hash.h"
 
@@ -119,6 +120,7 @@ PageID addToRelation(Reln r, Tuple t)
 {
 	assert(r != NULL && t != NULL && strlen(t) == tupSize(r));
 	Page p;  PageID pid;
+	Bool pcheck=FALSE;
 	RelnParams *rp = &(r->params);
 	
 	// add tuple to last page
@@ -126,6 +128,7 @@ PageID addToRelation(Reln r, Tuple t)
 	p = getPage(r->dataf, pid);
 	// check if room on last page; if not add new page
 	if (pageNitems(p) == rp->tupPP) {
+	    pcheck = TRUE;
 		addPage(r->dataf);
 		rp->npages++;
 		pid++;
@@ -160,6 +163,35 @@ PageID addToRelation(Reln r, Tuple t)
 	// compute page signature and add to psigf
 
 	//TODO
+
+    Bits psig = makePageSig(r, t);
+    PageID psigpid = rp->psigNpages - 1;
+    Page psigpage = getPage(r->psigf, psigpid);
+    if (pcheck==TRUE) {
+        // if the page is full
+        if (pageNitems(psigpage) == rp->psigPP) {
+            addPage(r->psigf);
+            rp->psigNpages++;
+            psigpid++;
+            free(psigpage);
+            psigpage = newPage();
+            if (psigpage == NULL) return NO_PAGE;
+        }
+        putBits(psigpage, pageNitems(psigpage), psig);
+        addOneItem(psigpage);
+        rp->npsigs++;
+
+    }else{
+        Bits ppsig = newBits(psigBits(r));
+        getBits(psigpage, pageNitems(psigpage)-1, ppsig);
+        orBits(psig, ppsig);
+        putBits(psigpage, pageNitems(psigpage)-1, psig);
+
+    }
+
+    putPage(r->psigf, psigpid, psigpage);
+
+
 
 	// use page signature to update bit-slices
 

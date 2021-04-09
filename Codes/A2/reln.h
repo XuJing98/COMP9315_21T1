@@ -32,7 +32,7 @@ typedef struct _RelnParams {
 	Count  tsigPP;     // max tuple signatures per page
 	Count  pm;         // width of page signature (#bits)
 	Count  psigSize;   // # bytes in page signature
-	Count  psigPP;     // max tuple signatures per page
+	Count  psigPP;     // max page signatures per page
 	Count  bm;         // width of bit-slice (=maxpages)
 	Count  bsigSize;   // # bytes in bit-slice
 	Count  bsigPP;     // max bit-slices per page
