@@ -144,7 +144,7 @@ PageID addToRelation(Reln r, Tuple t)
     PageID tsigpid = rp->tsigNpages - 1;
     Page tsigpage = getPage(r->tsigf, tsigpid);
     // if the page is full
-    if (pageNitems(tsigpage) == maxTsigsPP(r)) {
+    if (pageNitems(tsigpage) == rp->tsigPP) {
         addPage(r->tsigf);
         rp->tsigNpages++;
         tsigpid++;
@@ -153,10 +153,8 @@ PageID addToRelation(Reln r, Tuple t)
         if (tsigpage == NULL) return NO_PAGE;
     }
     putBits(tsigpage, pageNitems(tsigpage), tsig);
-    // add one item
     addOneItem(tsigpage);
     rp->ntsigs++;
-    // write into file
     putPage(r->tsigf, tsigpid, tsigpage);
 
 	// compute page signature and add to psigf

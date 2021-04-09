@@ -164,8 +164,8 @@ void findPagesUsingTupSigs(Query q)
 //            showBits(tuplesig);
 //            putchar('\n');
             if (isSubset(querysig, tuplesig)){
-//                printf("!");
-                setBit(q->pages, q->nsigs / maxTupsPP(r));
+            // convert tuple index id into data page ID
+                setBit(q->pages, (q->nsigs - 1) / maxTupsPP(r));
             }
             q->nsigs++;
         }
