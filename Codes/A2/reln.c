@@ -185,6 +185,7 @@ PageID addToRelation(Reln r, Tuple t)
 //        showBits(ppsig);
         if (ppsig == NULL) ppsig = newBits(psigBits(r));
         orBits(psig, ppsig);
+        freeBits(ppsig);
         putBits(psigpage, pageNitems(psigpage)-1, psig);
 
     }

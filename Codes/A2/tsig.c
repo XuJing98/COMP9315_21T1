@@ -53,6 +53,7 @@ Bits makeTupleSigSIMC(Reln r, Tuple t)
         }
         orBits(tsig, cw);
     }
+    freeBits(cw);
     return tsig;
 }
 
@@ -107,6 +108,7 @@ Bits makeTupleSigCATC(Reln r, Tuple t)
         }
 
     }
+    freeBits(cw);
 //    printf("tsig");
 //    showBits(tsig);
 //    putchar('\n');
@@ -171,6 +173,9 @@ void findPagesUsingTupSigs(Query q)
         }
         q->nsigpages++;
     }
+
+    freeBits(tuplesig);
+    freeBits(querysig);
 
 	// The printf below is primarily for debugging
 	// Remove it before submitting this function

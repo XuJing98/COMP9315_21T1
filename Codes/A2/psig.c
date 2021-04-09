@@ -50,6 +50,7 @@ Bits makePageSigSIMC(Reln r, Tuple t)
         }
         orBits(psig, cw);
     }
+    freeBits(cw);
     return psig;
 }
 
@@ -104,6 +105,7 @@ Bits makePageSigCATC(Reln r, Tuple t)
         }
 
     }
+    freeBits(cw);
 //    printf("psig");
 //    showBits(psig);
 //    putchar('\n');
@@ -154,6 +156,8 @@ void findPagesUsingPageSigs(Query q)
         }
         q->nsigpages++;
     }
+    freeBits(querysig);
+    freeBits(pagesig);
 
 }
 
