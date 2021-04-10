@@ -47,10 +47,10 @@ printf "./select R '?,?,a3-241,a4-158,a5-407,?' p\n"
 printf "./select R '?,?,a3-241,a4-158,a5-407,?' b\n"
 ./select R '?,?,a3-241,a4-158,a5-407,?' b
 
-rm R.bsig
-rm R.data
-rm R.in
-rm R.info
-rm R.psig
-rm R.tsig
+rm -rv R.bsig
+rm -rv R.data
+rm -rv R.in
+rm -rv R.info
+rm -rv R.psig
+rm -rv R.tsig
 
