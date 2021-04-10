@@ -222,21 +222,28 @@ PageID addToRelation(Reln r, Tuple t)
     Bits bsigtuple = newBits(bsigBits(r));
     bsigpp = rp->bsigPP;
     bposition = rp->npages-1;
+    bpageID = -1;
+    showBits(psig);
 	for (int i=0; i < psigBits(r); i++)
     {
 	    if (bitIsSet(psig, i))
         {
-	        bpageID = i / bsigpp;
+            if (i/bsigpp != bpageID) {
+                printf("b\n");
+                bpageID = i / bsigpp;
+                bsigpage = getPage(r->bsigf, bpageID);
+            }
 	        boffset = i % bsigpp;
-	        bsigpage = getPage(r->bsigf, bpageID);
+//	        bsigpage = getPage(r->bsigf, bpageID);
             getBits(bsigpage, boffset, bsigtuple);
-//            printf("bsigtuple:%d, bposition:%d,pid:%d, codebits:%d\n",bsigBits(r),bposition,i, codeBits(r));
+//            printf("bsigtuple:%d, bposition:%d,pid:%d, bsigpp:%d\n",bsigBits(r),bposition,i,bsigpp);
             setBit(bsigtuple, bposition);
             putBits(bsigpage, boffset, bsigtuple);
             putPage(r->bsigf, bpageID,bsigpage);
         }
 
     }
+	free(bsigpage);
 	free(psig);
 	free(tsig);
 	free(bsigtuple);
