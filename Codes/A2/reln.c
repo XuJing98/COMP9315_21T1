@@ -219,10 +219,10 @@ PageID addToRelation(Reln r, Tuple t)
 
 	//TODO
 	Page bsigpage;
-    int bpageID, boffset, bposition;
+    int bpageID, boffset, bsigpp, bposition;
     Bits bsigtuple = newBits(bsigBits(r));
     bposition = rp->npages-1;
-    bpageID = -1;
+    bsigpp = maxBsigsPP(r);
 	for (int i=0; i < psigBits(r); i++)
     {
 	    if (bitIsSet(psig, i))
@@ -231,8 +231,8 @@ PageID addToRelation(Reln r, Tuple t)
 //                bpageID = i / maxBsigsPP(r);
 //                bsigpage = getPage(r->bsigf, bpageID);
 //            }
-            bpageID = i / maxBsigsPP(r);
-	        boffset = i % maxBsigsPP(r);
+            bpageID = i / bsigpp;
+	        boffset = i % bsigpp;
             bsigpage = getPage(r->bsigf, bpageID);
             getBits(bsigpage, boffset, bsigtuple);
             setBit(bsigtuple, bposition);
@@ -241,7 +241,7 @@ PageID addToRelation(Reln r, Tuple t)
         }
 
     }
-
+//    free(bsigpage);
 	free(psig);
 	free(tsig);
 	free(bsigtuple);
