@@ -64,6 +64,7 @@ Status newRelation(char *name, Count nattrs, float pF, char sigtype,
 	//TODO
 	PageID bsigpageID;
 	Page bsigpage;
+//	printf("bm:%d",bm);
 	Bits bsig = newBits(bm);
 	for (int i=0; i<pm; i++)
     {
@@ -205,13 +206,13 @@ PageID addToRelation(Reln r, Tuple t)
     }else{
         Bits ppsig = newBits(psigBits(r));
         getBits(psigpage, pageNitems(psigpage)-1, ppsig);
-        if (ppsig == NULL) ppsig = newBits(psigBits(r));
         orBits(psig, ppsig);
         freeBits(ppsig);
         putBits(psigpage, pageNitems(psigpage)-1, psig);
 
     }
     putPage(r->psigf, psigpid, psigpage);
+
 
 	// use page signature to update bit-slices
 
@@ -220,7 +221,7 @@ PageID addToRelation(Reln r, Tuple t)
     int bpageID, boffset, bsigpp, bposition;
     Bits bsigtuple = newBits(bsigBits(r));
     bsigpp = maxBsigsPP(r);
-    bposition = rp->npsigs-1;
+    bposition = nPages(r)-1;
 	for (int i=0; i < psigBits(r); i++)
     {
 	    if (bitIsSet(psig, i))
@@ -229,15 +230,17 @@ PageID addToRelation(Reln r, Tuple t)
 	        boffset = i % bsigpp;
 	        bsigpage = getPage(r->bsigf, bpageID);
             getBits(bsigpage, boffset, bsigtuple);
+//            printf("bsigtuple:%d, bposition:%d,pid:%d, codebits:%d\n",bsigBits(r),bposition,i, codeBits(r));
             setBit(bsigtuple, bposition);
             putBits(bsigpage, boffset, bsigtuple);
             putPage(r->bsigf, bpageID,bsigpage);
-
         }
 
     }
+	free(psig);
+	free(tsig);
+	free(bsigtuple);
 
-	freeBits(bsigtuple);
 
 	return nPages(r)-1;
 }

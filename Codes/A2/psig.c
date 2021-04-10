@@ -38,10 +38,7 @@ Bits makePageSigSIMC(Reln r, Tuple t)
     {
         if (strcmp(tupleval[i], questionmark)==0)
         {
-            cw = newBits(m);
-//            printf("question mark ");
-//            showBits(cw);
-//            putchar('\n');
+            continue;
         }else{
             cw = codeword1(tupleval[i], m, k);
 //            printf("attribute tuple ");

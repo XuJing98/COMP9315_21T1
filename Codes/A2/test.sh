@@ -12,7 +12,7 @@ printf "./create R simc 10000 6 1000\n"
 ./create R simc 10000 6 1000
 
 printf "./insert R < R.in\n"
-./insert R < R.in
+time ./insert R < R.in
 
 printf "./stats R\n"
 ./stats R
