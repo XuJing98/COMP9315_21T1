@@ -220,8 +220,8 @@ PageID addToRelation(Reln r, Tuple t)
 	Page bsigpage;
     int bpageID, boffset, bsigpp, bposition;
     Bits bsigtuple = newBits(bsigBits(r));
-    bsigpp = maxBsigsPP(r);
-    bposition = nPages(r)-1;
+    bsigpp = rp->bsigPP;
+    bposition = rp->npages-1;
 	for (int i=0; i < psigBits(r); i++)
     {
 	    if (bitIsSet(psig, i))

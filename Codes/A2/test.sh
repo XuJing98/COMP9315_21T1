@@ -29,8 +29,8 @@ printf "./select R '1234999,?,?,?,?,?' t\n"
 printf "./select R '1234999,?,?,?,?,?' p\n"
 ./select R '1234999,?,?,?,?,?' p
 
-#printf "./select R '1234999,?,?,?,?,?' b\n"
-#./select R '1234999,?,?,?,?,?' b
+printf "./select R '1234999,?,?,?,?,?' b\n"
+./select R '1234999,?,?,?,?,?' b
 
 printf "grep 'a3-241,a4-158,a5-407' R.in\n"
 grep 'a3-241,a4-158,a5-407' R.in
@@ -44,8 +44,8 @@ printf "./select R '?,?,a3-241,a4-158,a5-407,?' t\n"
 printf "./select R '?,?,a3-241,a4-158,a5-407,?' p\n"
 ./select R '?,?,a3-241,a4-158,a5-407,?' p
 
-#printf "./select R '?,?,a3-241,a4-158,a5-407,?' b\n"
-#./select R '?,?,a3-241,a4-158,a5-407,?' b
+printf "./select R '?,?,a3-241,a4-158,a5-407,?' b\n"
+./select R '?,?,a3-241,a4-158,a5-407,?' b
 
 rm R.bsig
 rm R.data

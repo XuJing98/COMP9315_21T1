@@ -41,9 +41,6 @@ Bits makePageSigSIMC(Reln r, Tuple t)
             continue;
         }else{
             cw = codeword1(tupleval[i], m, k);
-//            printf("attribute tuple ");
-//            showBits(cw);
-//            putchar('\n');
         }
         orBits(psig, cw);
     }
@@ -117,17 +114,16 @@ Bits makePageSig(Reln r, Tuple t)
 	//TODO
 	Bits psig;
     char sigtype = sigType(r);
-//    printf("pm:%d",psigBits(r));
     switch(sigtype){
         case 'c':
-            psig = makePageSigCATC(r, t); break;
+            psig = makePageSigCATC(r, t);
+            break;
         case 's':
-            psig = makePageSigSIMC(r, t); break;
+            psig = makePageSigSIMC(r, t);
+            break;
     }
-//    printf("pagesignature:");
-//    showBits(psig);
+    return  psig;
 
-    return psig;
 }
 
 void findPagesUsingPageSigs(Query q)
