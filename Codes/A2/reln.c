@@ -18,6 +18,7 @@
 // - always open for both reading and writing
 
 
+
 File openFile(char *name, char *suffix)
 {
 	char fname[MAXFILENAME];
@@ -139,6 +140,18 @@ void closeRelation(Reln r)
 	free(r);
 }
 
+
+
+Status bputPage(File f, PageID pid, Page p)
+{
+    assert(pid >= 0);
+    int ok = lseek(f, pid*PAGESIZE, SEEK_SET);
+    assert(ok >= 0);
+    int n = write(f, p, PAGESIZE);
+    assert(n == PAGESIZE);
+    return 0;
+}
+
 // insert a new tuple into a relation
 // returns page where inserted
 // returns NO_PAGE if insert fails completely
@@ -190,6 +203,7 @@ PageID addToRelation(Reln r, Tuple t)
     Bits psig = makePageSig(r, t);
     PageID psigpid = rp->psigNpages - 1;
     Page psigpage = getPage(r->psigf, psigpid);
+
     if (rp->npages != rp->npsigs) {
         // if the page is full
         if (pageNitems(psigpage) == rp->psigPP) {
@@ -208,7 +222,7 @@ PageID addToRelation(Reln r, Tuple t)
         Bits ppsig = newBits(psigBits(r));
         getBits(psigpage, pageNitems(psigpage)-1, ppsig);
         orBits(psig, ppsig);
-        freeBits(ppsig);
+        free(ppsig);
         putBits(psigpage, pageNitems(psigpage)-1, psig);
 
     }
@@ -218,8 +232,10 @@ PageID addToRelation(Reln r, Tuple t)
 	// use page signature to update bit-slices
 
 	//TODO
-	Page bsigpage;
-    int bpageID, boffset, bsigpp, bposition;
+
+
+    int bpageID=-1, boffset, bsigpp, bposition;
+    Page bsigpage;
     Bits bsigtuple = newBits(bsigBits(r));
     bposition = rp->npages-1;
     bsigpp = maxBsigsPP(r);
@@ -227,21 +243,21 @@ PageID addToRelation(Reln r, Tuple t)
     {
 	    if (bitIsSet(psig, i))
         {
-//            if (i/maxBsigsPP(r) != bpageID) {
-//                bpageID = i / maxBsigsPP(r);
-//                bsigpage = getPage(r->bsigf, bpageID);
-//            }
-            bpageID = i / bsigpp;
+            if (i/bsigpp != bpageID) {
+                bpageID = i / bsigpp;
+                bsigpage = getPage(r->bsigf, bpageID);
+            }
+//            bpageID = i / bsigpp;
 	        boffset = i % bsigpp;
-            bsigpage = getPage(r->bsigf, bpageID);
+//            bsigpage = getPage(r->bsigf, bpageID);
             getBits(bsigpage, boffset, bsigtuple);
             setBit(bsigtuple, bposition);
             putBits(bsigpage, boffset, bsigtuple);
-            putPage(r->bsigf, bpageID,bsigpage);
+            bputPage(r->bsigf, bpageID,bsigpage);
         }
 
     }
-//    free(bsigpage);
+    free(bsigpage);
 	free(psig);
 	free(tsig);
 	free(bsigtuple);
