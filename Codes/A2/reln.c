@@ -182,82 +182,78 @@ PageID addToRelation(Reln r, Tuple t)
 	
 	//TODO
     Bits tsig = makeTupleSig(r, t);
-    PageID tsigpid = rp->tsigNpages - 1;
-    Page tsigpage = getPage(r->tsigf, tsigpid);
+    pid = rp->tsigNpages - 1;
+    p = getPage(r->tsigf, pid);
     // if the page is full
-    if (pageNitems(tsigpage) == rp->tsigPP) {
+    if (pageNitems(p) == rp->tsigPP) {
         addPage(r->tsigf);
         rp->tsigNpages++;
-        tsigpid++;
-        free(tsigpage);
-        tsigpage = newPage();
-        if (tsigpage == NULL) return NO_PAGE;
+        pid++;
+        free(p);
+        p = newPage();
+        if (p == NULL) return NO_PAGE;
     }
-    putBits(tsigpage, pageNitems(tsigpage), tsig);
-    addOneItem(tsigpage);
+    putBits(p, pageNitems(p), tsig);
+    addOneItem(p);
     rp->ntsigs++;
-    putPage(r->tsigf, tsigpid, tsigpage);
+    putPage(r->tsigf, pid, p);
 	// compute page signature and add to psigf
 
 	//TODO
     Bits psig = makePageSig(r, t);
-    PageID psigpid = rp->psigNpages - 1;
-    Page psigpage = getPage(r->psigf, psigpid);
+    pid = rp->psigNpages - 1;
+    p = getPage(r->psigf, pid);
 
     if (rp->npages != rp->npsigs) {
         // if the page is full
-        if (pageNitems(psigpage) == rp->psigPP) {
+        if (pageNitems(p) == rp->psigPP) {
             addPage(r->psigf);
             rp->psigNpages++;
-            psigpid++;
-            free(psigpage);
-            psigpage = newPage();
-            if (psigpage == NULL) return NO_PAGE;
+            pid++;
+            free(p);
+            p = newPage();
+            if (p == NULL) return NO_PAGE;
         }
-        putBits(psigpage, pageNitems(psigpage), psig);
-        addOneItem(psigpage);
+        putBits(p, pageNitems(p), psig);
+        addOneItem(p);
         rp->npsigs++;
 
     }else{
-        Bits ppsig = newBits(psigBits(r));
-        getBits(psigpage, pageNitems(psigpage)-1, ppsig);
+        Bits ppsig = newBits(rp->pm);
+        getBits(p, pageNitems(p)-1, ppsig);
         orBits(psig, ppsig);
         free(ppsig);
-        putBits(psigpage, pageNitems(psigpage)-1, psig);
+        putBits(p, pageNitems(p)-1, psig);
 
     }
-    putPage(r->psigf, psigpid, psigpage);
+    putPage(r->psigf, pid, p);
 
 
 	// use page signature to update bit-slices
 
 	//TODO
 
+    pid = -1;
+    Bits bsigtuple = newBits(rp->bm);
 
-    int bpageID=-1, boffset, bsigpp, bposition;
-    Page bsigpage;
-    Bits bsigtuple = newBits(bsigBits(r));
-    bposition = rp->npages-1;
-    bsigpp = maxBsigsPP(r);
-	for (int i=0; i < psigBits(r); i++)
+	for (int i=0; i < rp->pm; i++)
     {
 	    if (bitIsSet(psig, i))
         {
-            if (i/bsigpp != bpageID) {
-                bpageID = i / bsigpp;
-                bsigpage = getPage(r->bsigf, bpageID);
+            if (i/rp->bsigPP != pid) {
+                pid = i / rp->bsigPP;
+                p = getPage(r->bsigf, pid);
             }
 //            bpageID = i / bsigpp;
-	        boffset = i % bsigpp;
 //            bsigpage = getPage(r->bsigf, bpageID);
-            getBits(bsigpage, boffset, bsigtuple);
-            setBit(bsigtuple, bposition);
-            putBits(bsigpage, boffset, bsigtuple);
-            bputPage(r->bsigf, bpageID,bsigpage);
+            getBits(p, i % rp->bsigPP, bsigtuple);
+            setBit(bsigtuple, rp->npages-1);
+            putBits(p, i % rp->bsigPP, bsigtuple);
+            bputPage(r->bsigf, pid, p);
         }
 
     }
-    free(bsigpage);
+    free(p);
 	free(psig);
 	free(tsig);
 	free(bsigtuple);

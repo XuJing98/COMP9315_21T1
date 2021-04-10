@@ -32,14 +32,13 @@ Bits makeTupleSigSIMC(Reln r, Tuple t)
 {
     Bits tsig,cw;
     char **tupleval = tupleVals(r, t);
-    int nAttr = nAttrs(r);
-    int m = tsigBits(r);
-    int k = codeBits(r);
-    char *questionmark = "?\0";
+    int nAttr = r->params.nattrs;
+    int m = r->params.tm;
+    int k = r->params.tk;
     tsig = newBits(m);
     for (int i=0; i<nAttr; i++)
     {
-        if (strcmp(tupleval[i], questionmark)==0)
+        if (tupleval[i][0]=='?')
         {
             continue;
         }else{
@@ -66,11 +65,10 @@ Bits makeTupleSigCATC(Reln r, Tuple t)
     int m2 = tsigBits(r) % nAttr;
     int k = codeBits(r);
     int counter1, counter2=0;
-    char *questionmark = "?\0";
     tsig = newBits(m);
     for (int i=0; i<nAttr; i++)
     {
-        if (strcmp(tupleval[i],questionmark)==0)
+        if (tupleval[i][0]=='?')
         {
             if (m2!=0 && i==0)
             {

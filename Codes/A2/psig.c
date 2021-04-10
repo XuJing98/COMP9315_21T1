@@ -29,22 +29,18 @@ Bits makePageSigSIMC(Reln r, Tuple t)
 {
     Bits psig,cw;
     char **tupleval = tupleVals(r, t);
-    int nAttr = nAttrs(r);
-    int m = psigBits(r);
-    int k = codeBits(r);
-    char *questionmark = "?\0";
-    psig = newBits(m);
-    for (int i=0; i<nAttr; i++)
+    psig = newBits(r->params.pm);
+    for (int i=0; i<r->params.nattrs; i++)
     {
-        if (strcmp(tupleval[i], questionmark)==0)
+        if (tupleval[i][0]=='?')
         {
             continue;
         }else{
-            cw = codeword1(tupleval[i], m, k);
+            cw = codeword1(tupleval[i], r->params.pm, r->params.tk);
         }
         orBits(psig, cw);
     }
-    freeBits(cw);
+    free(cw);
     return psig;
 }
 
@@ -54,17 +50,16 @@ Bits makePageSigCATC(Reln r, Tuple t)
 {
     Bits psig,cw;
     char **tupleval = tupleVals(r, t);
-    int nAttr = nAttrs(r);
-    int m = psigBits(r);
-    int m1 = psigBits(r) / nAttr;
-    int m2 = psigBits(r) % nAttr;
-    int k = codeBits(r);
+    int nAttr = r->params.nattrs;
+    int m = r->params.pm;
+    int m1 = m / nAttr;
+    int m2 = m % nAttr;
+    int k = r->params.tk;
     int counter1, counter2=0;
-    char *questionmark = "?\0";
     psig = newBits(m);
     for (int i=0; i<nAttr; i++)
     {
-        if (strcmp(tupleval[i],questionmark)==0)
+        if (tupleval[i][0]=='?')
         {
             if (m2!=0 && i==0)
             {
@@ -99,7 +94,7 @@ Bits makePageSigCATC(Reln r, Tuple t)
         }
 
     }
-    freeBits(cw);
+    free(cw);
 //    printf("psig");
 //    showBits(psig);
 //    putchar('\n');
