@@ -17,6 +17,7 @@
 // open a file with a specified suffix
 // - always open for both reading and writing
 
+
 File openFile(char *name, char *suffix)
 {
 	char fname[MAXFILENAME];
@@ -218,32 +219,29 @@ PageID addToRelation(Reln r, Tuple t)
 
 	//TODO
 	Page bsigpage;
-    int bpageID, boffset, bsigpp, bposition;
+    int bpageID, boffset, bposition;
     Bits bsigtuple = newBits(bsigBits(r));
-    bsigpp = rp->bsigPP;
     bposition = rp->npages-1;
     bpageID = -1;
-    showBits(psig);
 	for (int i=0; i < psigBits(r); i++)
     {
 	    if (bitIsSet(psig, i))
         {
-            if (i/bsigpp != bpageID) {
-                printf("b\n");
-                bpageID = i / bsigpp;
-                bsigpage = getPage(r->bsigf, bpageID);
-            }
-	        boffset = i % bsigpp;
-//	        bsigpage = getPage(r->bsigf, bpageID);
+//            if (i/maxBsigsPP(r) != bpageID) {
+//                bpageID = i / maxBsigsPP(r);
+//                bsigpage = getPage(r->bsigf, bpageID);
+//            }
+            bpageID = i / maxBsigsPP(r);
+	        boffset = i % maxBsigsPP(r);
+            bsigpage = getPage(r->bsigf, bpageID);
             getBits(bsigpage, boffset, bsigtuple);
-//            printf("bsigtuple:%d, bposition:%d,pid:%d, bsigpp:%d\n",bsigBits(r),bposition,i,bsigpp);
             setBit(bsigtuple, bposition);
             putBits(bsigpage, boffset, bsigtuple);
             putPage(r->bsigf, bpageID,bsigpage);
         }
 
     }
-	free(bsigpage);
+
 	free(psig);
 	free(tsig);
 	free(bsigtuple);
