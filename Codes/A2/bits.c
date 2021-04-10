@@ -45,7 +45,7 @@ Bool bitIsSet(Bits b, int position)
 	assert(b != NULL);
 	assert(0 <= position && position < b->nbits);
 	//TODO
-	Count arrayIndex, arrayPosition;
+	int arrayIndex, arrayPosition;
 	Byte mask;
 	//the byte position of the bit is in
 	arrayIndex = position / 8;
@@ -86,7 +86,7 @@ void setBit(Bits b, int position)
 	assert(b != NULL);
 	assert(0 <= position && position < b->nbits);
 	//TODO
-    Count arrayIndex, arrayPosition;
+    int arrayIndex, arrayPosition;
     Byte mask;
     //the byte position of the bit is in
     arrayIndex = position / 8;
@@ -94,7 +94,7 @@ void setBit(Bits b, int position)
     arrayPosition = position % 8;
     // make the bit at position is 1 else 0
     mask  = (1 << arrayPosition);
-    b->bitstring[arrayIndex] = mask | (b->bitstring[arrayIndex]);
+    b->bitstring[arrayIndex] = b->bitstring[arrayIndex] | mask;
 }
 
 // set all bits to 1
@@ -158,12 +158,7 @@ void andBits(Bits b1, Bits b2)
 
 void orBits(Bits b1, Bits b2)
 {
-//    showBits(b1);
-//    printf("%d", b1->nbytes);
-//    putchar('\n');
-//    showBits(b2);
-//    printf("%d", b2->nbytes);
-//    putchar('\n');
+
 	assert(b1 != NULL && b2 != NULL);
 	assert(b1->nbytes == b2->nbytes);
 	//TODO

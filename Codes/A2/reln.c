@@ -67,6 +67,7 @@ Status newRelation(char *name, Count nattrs, float pF, char sigtype,
 	Bits bsig = newBits(bm);
 	for (int i=0; i<pm; i++)
     {
+
 	    bsigpageID = p->bsigNpages - 1;
 	    bsigpage = getPage(r->bsigf, bsigpageID);
 	    if (pageNitems(bsigpage) == p->bsigPP )
@@ -185,7 +186,6 @@ PageID addToRelation(Reln r, Tuple t)
 
 	//TODO
     Bits psig = makePageSig(r, t);
-//    showBits(psig);
     PageID psigpid = rp->psigNpages - 1;
     Page psigpage = getPage(r->psigf, psigpid);
     if (rp->npages != rp->npsigs) {
@@ -217,32 +217,26 @@ PageID addToRelation(Reln r, Tuple t)
 
 	//TODO
 	Page bsigpage;
-	Bits bsigtuple;
-    PageID bpageID;
-    int boffset;
-//    printf("psigBits:%d\n", psigBits(r));
-//    showBits(psig);
-//    putchar('\n');
-	for (int i=0; i<psigBits(r); i++)
+    int bpageID, boffset, bsigpp, bposition;
+    Bits bsigtuple = newBits(bsigBits(r));
+    bsigpp = maxBsigsPP(r);
+    bposition = rp->npsigs-1;
+	for (int i=0; i < psigBits(r); i++)
     {
 	    if (bitIsSet(psig, i))
         {
-	        bpageID = i / maxBsigsPP(r);
-	        boffset = i % maxBsigsPP(r);
+	        bpageID = i / bsigpp;
+	        boffset = i % bsigpp;
 	        bsigpage = getPage(r->bsigf, bpageID);
-            bsigtuple = newBits(bsigBits(r));
             getBits(bsigpage, boffset, bsigtuple);
-            setBit(bsigtuple, nPsigs(r)-1);
-//            showBits(bsigtuple);
-//            putchar('\n');
+            setBit(bsigtuple, bposition);
             putBits(bsigpage, boffset, bsigtuple);
-            putPage(r->bsigf, bpageID,bsigpage );
+            putPage(r->bsigf, bpageID,bsigpage);
 
         }
 
     }
-	freeBits(tsig);
-	freeBits(psig);
+
 	freeBits(bsigtuple);
 
 	return nPages(r)-1;
