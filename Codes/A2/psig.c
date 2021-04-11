@@ -17,16 +17,15 @@ Bits makePageSigSIMC(Reln r, Tuple t)
     Bits psig,cw;
     char **tupleval = tupleVals(r, t);
     psig = newBits(r->params.pm);
-    cw = newBits(r->params.pm);
+
     for (int i=0; i<r->params.nattrs; i++)
     {
         if (tupleval[i][0]=='?')
         {
             continue;
         }else{
-            unsetAllBits(cw);
-            cw = codeword_reduce(cw,tupleval[i], r->params.pm, r->params.tk);
-//            cw = codeword(tupleval[i], r->params.pm, r->params.tk);
+
+            cw = codeword(tupleval[i], r->params.pm, r->params.tk);
 //            printf("cw");
 //            showBits(cw);
 //            putchar('\n');
