@@ -235,7 +235,6 @@ PageID addToRelation(Reln r, Tuple t)
 
     pid = -1;
     Bits bsigtuple = newBits(rp->bm);
-
 	for (int i=0; i < rp->pm; i++)
     {
 	    if (bitIsSet(psig, i))
@@ -254,9 +253,10 @@ PageID addToRelation(Reln r, Tuple t)
 
     }
     free(p);
+    free(bsigtuple);
 	free(psig);
 	free(tsig);
-	free(bsigtuple);
+
 
 
 	return nPages(r)-1;

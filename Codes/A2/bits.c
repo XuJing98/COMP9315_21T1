@@ -45,7 +45,6 @@ Bool bitIsSet(Bits b, int position)
 	assert(b != NULL);
 	assert(0 <= position && position < b->nbits);
 	//TODO
-
 	if ( (1 << (position % 8)) & (b->bitstring[position / 8]))
     {
         return TRUE;

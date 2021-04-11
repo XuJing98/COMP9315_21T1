@@ -7,21 +7,8 @@
 #include "query.h"
 #include "psig.h"
 #include "hash.h"
+#include "tsig.h"
 
-Bits codeword1(char *attr_value, int m, int k)
-{
-    int  nbits = 0;   // count of set bits
-    Bits cword = newBits(m);
-    srandom(hash_any(attr_value, strlen(attr_value)));
-    while (nbits < k) {
-        int i = random() % m;
-        if (!bitIsSet(cword, i)) {
-            setBit(cword, i);
-            nbits++;
-        }
-    }
-    return cword;  // m-bits with k 1-bits and m-k 0-bits
-}
 
 // make a page signature using SIMC
 
@@ -36,7 +23,7 @@ Bits makePageSigSIMC(Reln r, Tuple t)
         {
             continue;
         }else{
-            cw = codeword1(tupleval[i], r->params.pm, r->params.tk);
+            cw = codeword(tupleval[i], r->params.pm, r->params.tk);
 //            printf("cw");
 //            showBits(cw);
 //            putchar('\n');
@@ -77,10 +64,10 @@ Bits makePageSigCATC(Reln r, Tuple t)
         }else{
             if (m2 != 0 && i==0)
             {
-                cw = codeword1(tupleval[i], m1+m2, k);
+                cw = codeword(tupleval[i], m1+m2, k);
                 counter1 = m1 + m2;
             }else{
-                cw = codeword1(tupleval[i], m1, k);
+                cw = codeword(tupleval[i], m1, k);
                 counter1 = m1;
             }
 //            printf("attribute tuple ");
