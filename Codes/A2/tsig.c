@@ -14,7 +14,6 @@
 Bits codeword_reduce(Bits cword,char *attr_value, int m, int k)
 {
     int  nbits = 0;   // count of set bits
-    unsetAllBits(cword);
     srandom(hash_any(attr_value, strlen(attr_value)));
     while (nbits < k) {
         int i = random() % m;
@@ -51,14 +50,16 @@ Bits makeTupleSigSIMC(Reln r, Tuple t)
     int m = r->params.tm;
     int k = r->params.tk;
     tsig = newBits(m);
-    cw = newBits(m);
+//    cw = newBits(m);
     for (int i=0; i<nAttr; i++)
     {
         if (tupleval[i][0]=='?')
         {
             continue;
         }else{
-            cw = codeword_reduce(cw,tupleval[i], m, k);
+            unsetAllBits(cw);
+//            cw = codeword_reduce(cw,tupleval[i], m, k);
+            cw = codeword(tupleval[i], m, k);
 //            printf("attribute tuple ");
 //            showBits(cw);
 //            putchar('\n');
