@@ -118,17 +118,12 @@ Bits makeTupleSig(Reln r, Tuple t)
 {
 	assert(r != NULL && t != NULL);
 	//TODO
-	Bits tsig;
-	char sigtype = sigType(r);
-//    printf("sigtype:%c",sigtype);
-	switch(sigtype){
-	    case 'c':
-	        tsig = makeTupleSigCATC(r, t); break;
-        case 's':
-            tsig = makeTupleSigSIMC(r, t); break;
+	char sigtype = r->params.sigtype;
+	if (sigtype=='c'){
+	    return makeTupleSigCATC(r, t);
+	}else{
+        return makeTupleSigSIMC(r, t);
 	}
-//	printf("tsig:"); showBits(tsig); putchar('\n');
-	return tsig;
 
 }
 

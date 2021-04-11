@@ -37,10 +37,15 @@ Bits makePageSigSIMC(Reln r, Tuple t)
             continue;
         }else{
             cw = codeword1(tupleval[i], r->params.pm, r->params.tk);
+//            printf("cw");
+//            showBits(cw);
+//            putchar('\n');
         }
         orBits(psig, cw);
     }
-    free(cw);
+//    free(cw);
+//    printf("psig");
+//    showBits(psig);
     return psig;
 }
 
@@ -107,17 +112,13 @@ Bits makePageSig(Reln r, Tuple t)
 {
 	assert(r != NULL && t != NULL);
 	//TODO
-	Bits psig;
-    char sigtype = sigType(r);
-    switch(sigtype){
-        case 'c':
-            psig = makePageSigCATC(r, t);
-            break;
-        case 's':
-            psig = makePageSigSIMC(r, t);
-            break;
+    char sigtype = r->params.sigtype;
+    if(sigtype == 'c')
+    {
+        return makePageSigCATC(r, t);
+    } else {
+        return makePageSigSIMC(r, t);
     }
-    return  psig;
 
 }
 
