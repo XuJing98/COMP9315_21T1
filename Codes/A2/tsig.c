@@ -57,7 +57,7 @@ Bits makeTupleSigSIMC(Reln r, Tuple t)
         {
             continue;
         }else{
-            unsetAllBits(cw);
+//            unsetAllBits(cw);
 //            cw = codeword_reduce(cw,tupleval[i], m, k);
             cw = codeword(tupleval[i], m, k);
 //            printf("attribute tuple ");

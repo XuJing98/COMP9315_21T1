@@ -24,6 +24,7 @@ Bits makePageSigSIMC(Reln r, Tuple t)
         {
             continue;
         }else{
+//            unsetAllBits(cw);
 //            cw = codeword_reduce(cw,tupleval[i], r->params.pm, r->params.tk);
             cw = codeword(tupleval[i], r->params.pm, r->params.tk);
 //            printf("cw");
