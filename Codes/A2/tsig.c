@@ -11,11 +11,26 @@
 #include "bits.h"
 
 // generate a codeword with m,k
+Bits codeword_reduce(Bits cword,char *attr_value, int m, int k)
+{
+    int  nbits = 0;   // count of set bits
+    unsetAllBits(cword);
+    srandom(hash_any(attr_value, strlen(attr_value)));
+    while (nbits < k) {
+        int i = random() % m;
+        if (!bitIsSet(cword, i)) {
+            setBit(cword, i);
+            nbits++;
+        }
+    }
+    return cword;  // m-bits with k 1-bits and m-k 0-bits
+}
+
 Bits codeword(char *attr_value, int m, int k)
 {
     int  nbits = 0;   // count of set bits
-    Bits cword = newBits(m);
     srandom(hash_any(attr_value, strlen(attr_value)));
+    Bits cword = newBits(m);
     while (nbits < k) {
         int i = random() % m;
         if (!bitIsSet(cword, i)) {
@@ -36,20 +51,21 @@ Bits makeTupleSigSIMC(Reln r, Tuple t)
     int m = r->params.tm;
     int k = r->params.tk;
     tsig = newBits(m);
+    cw = newBits(m);
     for (int i=0; i<nAttr; i++)
     {
         if (tupleval[i][0]=='?')
         {
             continue;
         }else{
-            cw = codeword(tupleval[i], m, k);
+            cw = codeword_reduce(cw,tupleval[i], m, k);
 //            printf("attribute tuple ");
 //            showBits(cw);
 //            putchar('\n');
         }
         orBits(tsig, cw);
     }
-    freeBits(cw);
+    free(cw);
     return tsig;
 }
 
