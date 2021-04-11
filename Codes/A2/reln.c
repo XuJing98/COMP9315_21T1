@@ -240,12 +240,12 @@ PageID addToRelation(Reln r, Tuple t)
     {
 	    if (bitIsSet(psig, i))
         {
-            if (i/rp->bsigPP != pid) {
+            if(i/rp->bsigPP != pid) {
+                if (pid!=-1) free(p);
                 pid = i / rp->bsigPP;
                 p = getPage(r->bsigf, pid);
             }
-//            bpageID = i / bsigpp;
-//            bsigpage = getPage(r->bsigf, bpageID);
+
             getBits(p, i % rp->bsigPP, bsigtuple);
             setBit(bsigtuple, rp->npages-1);
             putBits(p, i % rp->bsigPP, bsigtuple);
