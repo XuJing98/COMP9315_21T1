@@ -45,15 +45,8 @@ Bool bitIsSet(Bits b, int position)
 	assert(b != NULL);
 	assert(0 <= position && position < b->nbits);
 	//TODO
-	int arrayIndex, arrayPosition;
-	Byte mask;
-	//the byte position of the bit is in
-	arrayIndex = position / 8;
-	//the position of the bit in that byte array
-	arrayPosition = position % 8;
-	// make the bit at position is 1 else 0
-	mask  = (1 << arrayPosition);
-	if (mask & (b->bitstring[arrayIndex]))
+
+	if ( (1 << (position % 8)) & (b->bitstring[position / 8]))
     {
         return TRUE;
     }
@@ -86,15 +79,8 @@ void setBit(Bits b, int position)
 	assert(b != NULL);
 	assert(0 <= position && position < b->nbits);
 	//TODO
-    int arrayIndex, arrayPosition;
-    Byte mask;
-    //the byte position of the bit is in
-    arrayIndex = position / 8;
-    //the position of the bit in that byte array
-    arrayPosition = position % 8;
-    // make the bit at position is 1 else 0
-    mask  = (1 << arrayPosition);
-    b->bitstring[arrayIndex] = b->bitstring[arrayIndex] | mask;
+
+    b->bitstring[position / 8] = b->bitstring[position / 8] | (1 << (position % 8));
 }
 
 // set all bits to 1
