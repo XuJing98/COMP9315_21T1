@@ -7,16 +7,18 @@
 #include "defs.h"
 #include "tsig.h"
 #include "hash.h"
+#include "reln.h"
+#include "bits.h"
 
 // generate a codeword with m,k
 
 Bits codeword(char *attr_value, int m, int k)
 {
-    int  nbits = 0;   // count of set bits
+    int  nbits = 0, i;   // count of set bits
     srandom(hash_any(attr_value, strlen(attr_value)));
     Bits cword = newBits(m);
     while (nbits < k) {
-        int i = random() % m;
+        i = random() % m;
         if (((1 << (i % 8)) & (cword->bitstring[i / 8]))==0) {
             cword->bitstring[i / 8] = cword->bitstring[i / 8] | (1 << (i % 8));
             nbits++;

@@ -9,6 +9,10 @@
 #include "reln.h"
 #include "tsig.h"
 #include "psig.h"
+#include "page.h"
+#include "tuple.h"
+#include "bits.h"
+#include "hash.h"
 
 // open a file with a specified suffix
 // - always open for both reading and writing
@@ -228,9 +232,7 @@ PageID addToRelation(Reln r, Tuple t)
 	//TODO
 
     pid = -1;
-    Bits bsigtuple = malloc(2*sizeof(Count) + rp->bsigSize);
-    bsigtuple->nbits = rp->bm;
-    bsigtuple->nbytes = rp->bsigSize;
+    Bits bsigtuple = newBits(rp->bm);
 	for (int i=0; i < rp->pm; i++)
     {
 	    if (bitIsSet(psig, i))
@@ -249,8 +251,8 @@ PageID addToRelation(Reln r, Tuple t)
         }
 
     }
-    free(bsigtuple);
     free(p);
+    free(bsigtuple);
 	free(psig);
 	free(tsig);
 

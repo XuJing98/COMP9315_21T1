@@ -9,7 +9,7 @@
 #include <assert.h>
 #include "defs.h"
 #include "bits.h"
-
+#include "page.h"
 
 // create a new Bits object
 

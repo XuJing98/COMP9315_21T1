@@ -2,11 +2,13 @@
 // part of signature indexed files
 // Written by John Shepherd, March 2019
 
+#include <string.h>
 #include "defs.h"
 #include "reln.h"
 #include "query.h"
 #include "psig.h"
 #include "tsig.h"
+#include "hash.h"
 
 
 // make a page signature using SIMC
