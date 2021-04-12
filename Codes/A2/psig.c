@@ -6,7 +6,6 @@
 #include "reln.h"
 #include "query.h"
 #include "psig.h"
-#include "hash.h"
 #include "tsig.h"
 
 

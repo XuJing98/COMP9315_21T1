@@ -62,6 +62,7 @@ Bool existsRelation(char *name);
 PageID addToRelation(Reln r, Tuple t);
 void relationStats(Reln r);
 
+
 // Convenience marcos
 
 #define nAttrs(REL)      (REL)->params.nattrs

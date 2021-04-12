@@ -9,14 +9,7 @@
 #include <assert.h>
 #include "defs.h"
 #include "bits.h"
-#include "page.h"
 
-typedef struct _BitsRep {
-	Count  nbits;		  // how many bits
-	Count  nbytes;		  // how many bytes in array
-	Byte   bitstring[1];  // array of bytes to hold bits
-	                      // actual array size is nbytes
-} BitsRep;
 
 // create a new Bits object
 
@@ -260,3 +253,5 @@ void showBits(Bits b)
 		}
 	}
 }
+
+

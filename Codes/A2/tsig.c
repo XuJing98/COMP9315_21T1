@@ -6,9 +6,7 @@
 #include <string.h>
 #include "defs.h"
 #include "tsig.h"
-#include "reln.h"
 #include "hash.h"
-#include "bits.h"
 
 // generate a codeword with m,k
 

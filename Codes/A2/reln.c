@@ -7,16 +7,11 @@
 #include <fcntl.h>
 #include "defs.h"
 #include "reln.h"
-#include "page.h"
-#include "tuple.h"
 #include "tsig.h"
-#include "bits.h"
-#include "hash.h"
 #include "psig.h"
 
 // open a file with a specified suffix
 // - always open for both reading and writing
-
 
 
 File openFile(char *name, char *suffix)
@@ -89,7 +84,6 @@ Status newRelation(char *name, Count nattrs, float pF, char sigtype,
 
     }
 	freeBits(bsig);
-
 	closeRelation(r);
 	return 0;
 }
@@ -234,12 +228,15 @@ PageID addToRelation(Reln r, Tuple t)
 	//TODO
 
     pid = -1;
-    Bits bsigtuple = newBits(rp->bm);
+    Bits bsigtuple = malloc(2*sizeof(Count) + rp->bsigSize);
+    bsigtuple->nbits = rp->bm;
+    bsigtuple->nbytes = rp->bsigSize;
 	for (int i=0; i < rp->pm; i++)
     {
 	    if (bitIsSet(psig, i))
         {
             if(i/rp->bsigPP != pid) {
+//                printf("a, %d\n", rp->bsigPP);
                 if (pid!=-1) free(p);
                 pid = i / rp->bsigPP;
                 p = getPage(r->bsigf, pid);

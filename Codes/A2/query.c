@@ -5,9 +5,6 @@
 
 #include "defs.h"
 #include "query.h"
-#include "reln.h"
-#include "tuple.h"
-#include "bits.h"
 #include "tsig.h"
 #include "psig.h"
 #include "bsig.h"

@@ -6,6 +6,13 @@
 #ifndef BITS_H
 #define BITS_H 1
 
+typedef struct _BitsRep {
+    Count  nbits;		  // how many bits
+    Count  nbytes;		  // how many bytes in array
+    Byte   bitstring[1];  // array of bytes to hold bits
+    // actual array size is nbytes
+} BitsRep;
+
 typedef struct _BitsRep *Bits;
 
 #include "defs.h"
