@@ -25,10 +25,7 @@ Bits makePageSigSIMC(Reln r, Tuple t)
         }
 
         cw = codeword(tupleval[i], r->params.pm, r->params.tk);
-        for (int j=0; j<psig->nbytes; j++)
-        {
-            psig->bitstring[j] = psig->bitstring[j] | cw->bitstring[j];
-        }
+        orBits(psig, cw);
     }
     free(cw);
     return psig;
