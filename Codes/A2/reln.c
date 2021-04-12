@@ -249,8 +249,8 @@ PageID addToRelation(Reln r, Tuple t)
         }
 
     }
-    free(p);
     free(bsigtuple);
+    free(p);
 	free(psig);
 	free(tsig);
 
