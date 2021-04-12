@@ -19,8 +19,8 @@ Bits codeword(char *attr_value, int m, int k)
     Bits cword = newBits(m);
     while (nbits < k) {
         int i = random() % m;
-        if (((1 << (i % 8)) & (cword->bitstring[i / 8]))==0) {
-            cword->bitstring[i / 8] = cword->bitstring[i / 8] | (1 << (i % 8));
+        if (!bitIsSet(cword,i)) {
+            setBit(cword, i);
             nbits++;
         }
     }
