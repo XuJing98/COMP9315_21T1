@@ -24,7 +24,6 @@ add_executable(test
         Codes/A2/tsig.h
         Codes/A2/bsig.c
         Codes/A2/bsig.h
-        Codes/A2/R.in
         Codes/A2/defs.h
         Codes/A2/hash.c
         Codes/A2/hash.h
