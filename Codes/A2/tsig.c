@@ -17,7 +17,7 @@ Bits codeword(char *attr_value, int m, int k)
     Bits cword = newBits(m);
     while (nbits < k) {
         int i = random() % m;
-        if (!bitIsSet(cword, i)) {
+        if (bitIsSet(cword, i)==FALSE) {
             setBit(cword, i);
             nbits++;
         }
@@ -40,12 +40,8 @@ Bits makeTupleSigSIMC(Reln r, Tuple t)
         if (tupleval[i][0]=='?')
         {
             continue;
-        }else{
-            cw = codeword(tupleval[i], m, k);
-//            printf("attribute tuple ");
-//            showBits(cw);
-//            putchar('\n');
         }
+        cw = codeword(tupleval[i], m, k);
         orBits(tsig, cw);
     }
     free(cw);
@@ -102,7 +98,7 @@ Bits makeTupleSigCATC(Reln r, Tuple t)
         }
 
     }
-    freeBits(cw);
+    free(cw);
 //    printf("tsig");
 //    showBits(tsig);
 //    putchar('\n');

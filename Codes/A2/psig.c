@@ -22,18 +22,12 @@ Bits makePageSigSIMC(Reln r, Tuple t)
         if (tupleval[i][0]=='?')
         {
             continue;
-        }else{
-
-            cw = codeword(tupleval[i], r->params.pm, r->params.tk);
-//            printf("cw");
-//            showBits(cw);
-//            putchar('\n');
         }
+
+        cw = codeword(tupleval[i], r->params.pm, r->params.tk);
         orBits(psig, cw);
     }
     free(cw);
-//    printf("psig");
-//    showBits(psig);
     return psig;
 }
 
