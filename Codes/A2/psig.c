@@ -96,12 +96,11 @@ Bits makePageSig(Reln r, Tuple t)
 {
 	assert(r != NULL && t != NULL);
 	//TODO
-    char sigtype = r->params.sigtype;
-    if(sigtype == 'c')
+    if(r->params.sigtype == 's')
     {
-        return makePageSigCATC(r, t);
-    } else {
         return makePageSigSIMC(r, t);
+    } else {
+        return makePageSigCATC(r, t);
     }
 
 }

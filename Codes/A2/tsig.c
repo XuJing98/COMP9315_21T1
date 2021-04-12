@@ -115,11 +115,10 @@ Bits makeTupleSig(Reln r, Tuple t)
 {
 	assert(r != NULL && t != NULL);
 	//TODO
-	char sigtype = r->params.sigtype;
-	if (sigtype=='c'){
-	    return makeTupleSigCATC(r, t);
+	if (r->params.sigtype=='s'){
+	    return makeTupleSigSIMC(r, t);
 	}else{
-        return makeTupleSigSIMC(r, t);
+        return makeTupleSigCATC(r, t);
 	}
 
 }
