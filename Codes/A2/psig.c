@@ -28,7 +28,7 @@ Bits makePageSigSIMC(Reln r, Tuple t)
 
         Bits cw = codeword(tupleval[i], r->params.pm, r->params.tk);
         orBits(psig, cw);
-        //    free(cw);
+        free(cw);
     }
 
     return psig;

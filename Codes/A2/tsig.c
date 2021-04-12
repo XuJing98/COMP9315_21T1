@@ -45,7 +45,7 @@ Bits makeTupleSigSIMC(Reln r, Tuple t)
         }
         Bits cw = codeword(tupleval[i], m, k);
         orBits(tsig, cw);
-        //    free(cw);
+        free(cw);
     }
 
     return tsig;
