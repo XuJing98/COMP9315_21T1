@@ -14,11 +14,11 @@
 
 Bits codeword(char *attr_value, int m, int k)
 {
-    int  nbits = 0, i;   // count of set bits
+    int  nbits = 0;   // count of set bits
     srandom(hash_any(attr_value, strlen(attr_value)));
     Bits cword = newBits(m);
     while (nbits < k) {
-        i = random() % m;
+        int i = random() % m;
         if (((1 << (i % 8)) & (cword->bitstring[i / 8]))==0) {
             cword->bitstring[i / 8] = cword->bitstring[i / 8] | (1 << (i % 8));
             nbits++;
@@ -31,22 +31,23 @@ Bits codeword(char *attr_value, int m, int k)
 
 Bits makeTupleSigSIMC(Reln r, Tuple t)
 {
-    Bits tsig,cw;
+
     char **tupleval = tupleVals(r, t);
     int nAttr = r->params.nattrs;
     int m = r->params.tm;
     int k = r->params.tk;
-    tsig = newBits(m);
+    Bits tsig = newBits(m);
     for (int i=0; i<nAttr; i++)
     {
         if (tupleval[i][0]=='?')
         {
             continue;
         }
-        cw = codeword(tupleval[i], m, k);
+        Bits cw = codeword(tupleval[i], m, k);
         orBits(tsig, cw);
+        //    free(cw);
     }
-    free(cw);
+
     return tsig;
 }
 

@@ -9,6 +9,7 @@
 int main(int argc, char **argv)
 {
 	Bits b = newBits(60);
+	Bits a = newBits(60);
 	printf("t=0: "); showBits(b); printf("\n");
 	setBit(b, 5);
 	printf("t=1: "); showBits(b); printf("\n");
@@ -17,9 +18,19 @@ int main(int argc, char **argv)
 	setBit(b, 59);
 	setBit(b, 22);
 	setBit(b, 11);
+	setBit(a,1);
+	setBit(a,3);
+	setBit(a, 11);
+	setBit(a, 22);
+	setBit(a, 33);
 	printf("t=2: "); showBits(b); printf("\n");
-	if (bitIsSet(b,5)) printf("Bit 5 is set\n");
-	if (bitIsSet(b,10)) printf("Bit 10 is set\n");
+    printf("t=3: "); showBits(a); printf("\n");
+    orBits(a,b);
+    printf("t=2: "); showBits(b); printf("\n");
+    printf("t=3: "); showBits(a); printf("\n");
+
+//	if (bitIsSet(b,5)) printf("Bit 5 is set\n");
+//	if (bitIsSet(b,10)) printf("Bit 10 is set\n");
 //	shiftBits(b,3);
 //    printf("t=3: "); showBits(b); printf("\n");
 //    shiftBits(b,0);

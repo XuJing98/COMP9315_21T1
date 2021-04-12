@@ -8,6 +8,9 @@
 #include "tsig.h"
 #include "psig.h"
 #include "bsig.h"
+#include "reln.h"
+#include "tuple.h"
+#include "bits.h"
 
 // check whether a query is valid for a relation
 // e.g. same number of attributes

@@ -195,6 +195,7 @@ PageID addToRelation(Reln r, Tuple t)
     addOneItem(p);
     rp->ntsigs++;
     putPage(r->tsigf, pid, p);
+    free(tsig);
 	// compute page signature and add to psigf
 
 	//TODO
@@ -217,11 +218,12 @@ PageID addToRelation(Reln r, Tuple t)
         rp->npsigs++;
 
     }else{
+
         Bits ppsig = newBits(rp->pm);
         getBits(p, pageNitems(p)-1, ppsig);
-        orBits(psig, ppsig);
+        orBits(ppsig, psig);
+        putBits(p, pageNitems(p)-1, ppsig);
         free(ppsig);
-        putBits(p, pageNitems(p)-1, psig);
 
     }
     putPage(r->psigf, pid, p);
@@ -230,7 +232,6 @@ PageID addToRelation(Reln r, Tuple t)
 	// use page signature to update bit-slices
 
 	//TODO
-
     pid = -1;
     Bits bsigtuple = newBits(rp->bm);
 	for (int i=0; i < rp->pm; i++)
@@ -254,7 +255,7 @@ PageID addToRelation(Reln r, Tuple t)
     free(p);
     free(bsigtuple);
 	free(psig);
-	free(tsig);
+
 
 
 

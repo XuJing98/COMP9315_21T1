@@ -42,9 +42,8 @@ Bool bitIsSet(Bits b, int position)
     {
         return TRUE;
     }
-	else{
-        return FALSE;
-	}
+
+	return FALSE;
 }
 
 // check whether one Bits b1 is a subset of Bits b2
