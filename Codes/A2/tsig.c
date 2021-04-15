@@ -61,7 +61,6 @@ Bits makeTupleSigCATC(Reln r, Tuple t)
     int m = tsigBits(r);
     int m1 = tsigBits(r) / nAttr;
     int m2 = tsigBits(r) % nAttr;
-    int k = codeBits(r);
     int counter1, counter2=0;
     tsig = newBits(m);
     for (int i=0; i<nAttr; i++)
@@ -79,10 +78,10 @@ Bits makeTupleSigCATC(Reln r, Tuple t)
         }else{
             if (m2 != 0 && i==0)
             {
-                cw = codeword(tupleval[i], m1+m2, k);
+                cw = codeword(tupleval[i], m1+m2, (m1+m2)/2);
                 counter1 = m1 + m2;
             }else{
-                cw = codeword(tupleval[i], m1, k);
+                cw = codeword(tupleval[i], m1, m1/2);
                 counter1 = m1;
             }
 //            printf("attribute tuple ");

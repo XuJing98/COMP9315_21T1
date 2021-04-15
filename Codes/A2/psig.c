@@ -9,6 +9,7 @@
 #include "psig.h"
 #include "tsig.h"
 #include "hash.h"
+#include "util.h"
 
 
 // make a page signature using SIMC
@@ -44,7 +45,6 @@ Bits makePageSigCATC(Reln r, Tuple t)
     int m = r->params.pm;
     int m1 = m / nAttr;
     int m2 = m % nAttr;
-    int k = r->params.tk;
     int counter1, counter2=0;
     psig = newBits(m);
     for (int i=0; i<nAttr; i++)
@@ -62,10 +62,10 @@ Bits makePageSigCATC(Reln r, Tuple t)
         }else{
             if (m2 != 0 && i==0)
             {
-                cw = codeword(tupleval[i], m1+m2, k);
+                cw = codeword(tupleval[i], m1+m2, iceil(m1+m2, 2*r->params.tupPP) );
                 counter1 = m1 + m2;
             }else{
-                cw = codeword(tupleval[i], m1, k);
+                cw = codeword(tupleval[i], m1, iceil(m1, 2*r->params.tupPP));
                 counter1 = m1;
             }
 
