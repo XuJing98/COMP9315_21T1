@@ -1,56 +1,61 @@
-#chmod +x ./test.sh
-# ./test.sh
+
 make clean
-
-printf "make\n"
 make
-
-printf "./gendata 10000 6 1234567 13 > R.in\n"
-./gendata 10000 6 1234567 13 > R.in
-
-printf "./create R simc 10000 6 1000\n"
-./create R simc 10000 6 1000
-
-printf "./insert R < R.in\n"
-time ./insert R < R.in
-
-printf "./stats R\n"
-./stats R
-
-printf "./select R '?,?,?,?,?,?' x | tail -6\n"
-./select R '?,?,?,?,?,?' x | tail -6
-
-printf "./select R '1234999,?,?,?,?,?' x\n"
-./select R '1234999,?,?,?,?,?' x
-
-printf "./select R '1234999,?,?,?,?,?' t\n"
-./select R '1234999,?,?,?,?,?' t
-
-printf "./select R '1234999,?,?,?,?,?' p\n"
-./select R '1234999,?,?,?,?,?' p
-
-printf "./select R '1234999,?,?,?,?,?' b\n"
-./select R '1234999,?,?,?,?,?' b
-
-printf "grep 'a3-241,a4-158,a5-407' R.in\n"
-grep 'a3-241,a4-158,a5-407' R.in
-
-printf "./select R '?,?,a3-241,a4-158,a5-407,?' x\n"
-./select R '?,?,a3-241,a4-158,a5-407,?' x
-
-printf "./select R '?,?,a3-241,a4-158,a5-407,?' t\n"
-./select R '?,?,a3-241,a4-158,a5-407,?' t
-
-printf "./select R '?,?,a3-241,a4-158,a5-407,?' p\n"
-./select R '?,?,a3-241,a4-158,a5-407,?' p
-
-printf "./select R '?,?,a3-241,a4-158,a5-407,?' b\n"
-./select R '?,?,a3-241,a4-158,a5-407,?' b
-
 rm -rv R.bsig
 rm -rv R.data
-rm -rv R.in
 rm -rv R.info
 rm -rv R.psig
 rm -rv R.tsig
+./create R simc 10100 4 1000
+./insert R < data3
+./stats R
+./select R '7663852,?,?,?'
+./select R '7663852,?,?,?' t
+./select R '7663852,?,?,?' p
+./select R '7663852,?,?,?' b
+./select R '7664096,PjZZsBYoEYAMzgpCgRKg,?,?'
+./select R '7664096,PjZZsBYoEYAMzgpCgRKg,?,?' t
+./select R '7664096,PjZZsBYoEYAMzgpCgRKg,?,?' p
+./select R '7664096,PjZZsBYoEYAMzgpCgRKg,?,?' b
+./select R '?,?,a3-242,a4-242'
+./select R '?,?,a3-242,a4-242' t
+./select R '?,?,a3-242,a4-242' p
+./select R '?,?,a3-242,a4-242' b
+./select R '8765432,?,?,?'
+./select R '8765432,?,?,?' t
+./select R '8765432,?,?,?' p
+./select R '8765432,?,?,?' b
+./select R '7664096,tRzgWRUlUEdoYPZjofYr,?,?'
+./select R '7664096,tRzgWRUlUEdoYPZjofYr,?,?' t
+./select R '7664096,tRzgWRUlUEdoYPZjofYr,?,?' p
+./select R '7664096,tRzgWRUlUEdoYPZjofYr,?,?' b
+rm -rv R.bsig
+rm -rv R.data
+rm -rv R.info
+rm -rv R.psig
+rm -rv R.tsig
+./create R catc 10100 4 1000
+./insert R < data3
+./stats R
+./select R '7663852,?,?,?'
+./select R '7663852,?,?,?' t
+./select R '7663852,?,?,?' p
+./select R '7663852,?,?,?' b
+./select R '7664096,PjZZsBYoEYAMzgpCgRKg,?,?'
+./select R '7664096,PjZZsBYoEYAMzgpCgRKg,?,?' t
+./select R '7664096,PjZZsBYoEYAMzgpCgRKg,?,?' p
+./select R '7664096,PjZZsBYoEYAMzgpCgRKg,?,?' b
+./select R '?,?,a3-242,a4-242'
+./select R '?,?,a3-242,a4-242' t
+./select R '?,?,a3-242,a4-242' p
+./select R '?,?,a3-242,a4-242' b
+./select R '8765432,?,?,?'
+./select R '8765432,?,?,?' t
+./select R '8765432,?,?,?' p
+./select R '8765432,?,?,?' b
+./select R '7664096,tRzgWRUlUEdoYPZjofYr,?,?'
+./select R '7664096,tRzgWRUlUEdoYPZjofYr,?,?' t
+./select R '7664096,tRzgWRUlUEdoYPZjofYr,?,?' p
+./select R '7664096,tRzgWRUlUEdoYPZjofYr,?,?' b
+
 
